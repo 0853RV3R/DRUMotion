@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="slick/tools/|slick/src/" kind="src" path="Examples and Tutorials"/>
+	<classpathentry kind="src" path="Examples and Tutorials/slick/src"/>
+	<classpathentry kind="src" path="Examples and Tutorials/slick/tools"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
