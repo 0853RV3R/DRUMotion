@@ -1,0 +1,2 @@
+<h1>What is DRUMotion?</h1>
+Stroke victims and survivors of serious accidents often suffer from impaired hand-eye coordination and dexterity. When patients are discharged from intensive rehabilitation centres, it is difficult to motivate them to continue the physical therapy exercises necessary to improve their mobility. <br><br><b>DRUMotion </b>is a video game designed specifically to aid recovering stroke patients in increasing their mobility and hand-eye coordination in a fun and musical way, all in the comfort of their own homes.
