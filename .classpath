@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="slick/tools/|slick/src/" kind="src" path="Examples and Tutorials"/>
-	<classpathentry kind="src" path="Examples and Tutorials/slick/src"/>
-	<classpathentry kind="src" path="Examples and Tutorials/slick/tools"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="jar/lwjgl.jar"/>
+	<classpathentry kind="lib" path="jar/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
