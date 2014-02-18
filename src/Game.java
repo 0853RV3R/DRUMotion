@@ -2,6 +2,7 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 // every Slick2D window or game extends from the basic game class, provided by Slick2D
@@ -46,8 +47,27 @@ public class Game extends BasicGame{
 	// update: called every frame update, before render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
 	// 't' ensures objects move at same speed, even with different frame rates
+	// USER INPUT GOES HERE
 	@Override
 	public void update(GameContainer gc, int t) throws SlickException {
+		// to get input from game container
+		Input input = gc.getInput();
+		if(input.isKeyDown(Input.KEY_RIGHT)){
+			x += 0.1*t;
+		}
+		if(input.isKeyDown(Input.KEY_LEFT)){
+			x -= 0.1*t;
+		}
+		if(input.isKeyDown(Input.KEY_UP)){
+			y -= 0.1*t;
+		}
+		if(input.isKeyDown(Input.KEY_DOWN)){
+			y += 0.1*t;
+		}
+		
+		/*
+		 * SOME AUTOMATIC PENTAGON MOVEMENT HORIZONTAL BACK AND FORTH:
+		 * 
 		if(x<=400 && goBack==false){
 			x += 0.1*t;
 		}
@@ -60,6 +80,8 @@ public class Game extends BasicGame{
 		if (goBack){
 			x -=0.2*t;
 		}
+		
+		*/
 		
 		
 		
