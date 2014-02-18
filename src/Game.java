@@ -9,7 +9,9 @@ import org.newdawn.slick.SlickException;
 public class Game extends BasicGame{
 	// assign variable to picture
 	private Image logo;
-	
+	private Image penta;
+	private float x,y;
+	boolean goBack;
 	
 	public Game() {
 		super("Game");
@@ -22,8 +24,9 @@ public class Game extends BasicGame{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
-		g.drawOval(300, 350, 40, 40);
-		logo.draw(250,25,350,150);
+		g.drawOval(300, 350, 80, 80);
+		logo.draw(180,25,450,130);
+		penta.draw(x,y,150,150);
 	}
 
 	
@@ -31,16 +34,35 @@ public class Game extends BasicGame{
 	// called before the start - only called once
 	// do the picture loading/ import images here!
 	@Override
-	public void init(GameContainer arg0) throws SlickException {
-		// TODO Auto-generated method stub
+	public void init(GameContainer gc) throws SlickException {
+		// associate variables to image files
 		logo = new Image("res/Logo.png");
+		penta = new Image("res/pentagon empty.png");
+		x = 30;
+		y= 200;
+		goBack=false;
 	}
 	
 	// update: called every frame update, before render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
+	// 't' ensures objects move at same speed, even with different frame rates
 	@Override
-	public void update(GameContainer arg0, int arg1) throws SlickException {
-		// TODO Auto-generated method stub
+	public void update(GameContainer gc, int t) throws SlickException {
+		if(x<=400 && goBack==false){
+			x += 0.1*t;
+		}
+		if(x>=400){
+			goBack = true;
+		}
+		if(x<=30){
+			goBack= false;
+		}
+		if (goBack){
+			x -=0.2*t;
+		}
+		
+		
+		
 		
 	}
 

@@ -18,6 +18,7 @@ public class Main {
 			AppGameContainer app = new AppGameContainer( new Game());
 			// set display mode 3 args: (width px, height px, fullscreen?)
 			app.setDisplayMode(800, 600, false);
+			app.setTargetFrameRate(60); // target frame rate: 60fps
 			app.start();
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
