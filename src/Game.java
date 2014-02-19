@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 // A basic scene:
 public class Game extends BasicGame{
 	// assign variable to picture
+	public static SceneManager manager;
 	private Image logo;
 	private Image penta;
 	private float x,y;
@@ -28,6 +29,7 @@ public class Game extends BasicGame{
 		g.drawOval(300, 350, 80, 80);
 		logo.draw(180,25,450,130);
 		penta.draw(x,y,150,150);
+		manager.render(gc, g);
 	}
 
 	
@@ -37,6 +39,9 @@ public class Game extends BasicGame{
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		// associate variables to image files
+		manager = new SceneManager(gc);
+		manager.addSence( new Scene1 () );
+		
 		logo = new Image("res/Logo.png");
 		penta = new Image("res/pentagon empty.png");
 		x = 30;
@@ -51,6 +56,7 @@ public class Game extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int t) throws SlickException {
 		// to get input from game container
+		manager.update(gc, t);
 		Input input = gc.getInput();
 		if(input.isKeyDown(Input.KEY_RIGHT)){
 			x += 0.1*t;
