@@ -6,10 +6,14 @@ import java.io.File;
 
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
 import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -33,7 +37,9 @@ public class Main extends StateBasedGame {
 			AppGameContainer app = new AppGameContainer(new Main("DRUMotion"));
 			// set display mode 3 args: (width px, height px, fullscreen?)
 			app.setDisplayMode(800, 600, false);
-			app.setTargetFrameRate(60); // target frame rate: 60fps
+			//Display.setInitialBackground(255, 250, 250);
+			app.setTargetFrameRate(80); // target frame rate: 60fps
+			
 			app.start();
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
