@@ -39,6 +39,7 @@ public class Game extends BasicGame{
 		// associate variables to image files
 		logo = new Image("res/Logo.png");
 		penta = new Image("res/pentagon empty.png");
+		
 		x = 30;
 		y= 200;
 		goBack=false;
