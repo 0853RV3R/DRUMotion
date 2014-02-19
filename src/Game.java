@@ -25,6 +25,13 @@ public class Game extends BasicGame{
 	Font font;
 	int score;
 	TrueTypeFont ttf;
+	int iPenta; // to increment through penta PNG strip values [1-4]
+	boolean pentaSignal,triSignal,squareSignal,circleSignal;
+	// signals
+	final int EMPTY = 1; // not signaled, not hit
+	final int SIGNAL = 2;
+	final int SIGNAL_HIT = 3; 
+	final int ERROR = 4; // they hit the drum, but it was not signaled
 	
 	public Game() {
 		super("Game");
@@ -39,7 +46,12 @@ public class Game extends BasicGame{
 		// TODO Auto-generated method stub
 		g.setBackground(backgroundColor);
 		logo.draw(280,25,450,130);
-		penta.draw(pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY2);
+		
+		
+		// modify the pentaStripX# for showing a portion of the .PNG strip
+		pentaStripX1 = 694*(iPenta-1);
+		pentaStripX2 = 694*iPenta;
+		penta.draw(pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2);
 		
 		// render text for score box
 		//g.setFont(font);
@@ -58,13 +70,20 @@ public class Game extends BasicGame{
 		backgroundColor = new Color(255, 250, 250);
 		// associate variables to image files:
 		logo = new Image("res/Logo.png");
-		penta = new Image("res/Drums/pentagon empty.png");
-		
+		penta = new Image("res/Drums/pentagon strip.png");
+		//initialize signals to false(off)
+		pentaSignal =false;
+		iPenta = 1;
 		// locations of images on screen:
 		pentaX1 = 200;
 		pentaY1 = 200;
-		pentaX2 = 150;
-		pentaY2 = 150;
+		pentaX2 = 350;
+		pentaY2 = 350;
+		// reveal parts of strip -- initially first picture on strip
+		pentaStripX1 = 0; // this should change to access different image on strip
+		pentaStripY1 = 0;
+		pentaStripX2 = 694; // this should change to access different image on strip
+		pentaStripY2 = 660; 
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
 		
@@ -80,15 +99,24 @@ public class Game extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int t) throws SlickException {
 		// to get input from game container
-		
-		
-		
-		// testing counter increment and decrement based on keyboard input
 		Input input = gc.getInput();
+		if (input.isKeyPressed(Input.KEY_1)) pentaSignal = true;
+		
+		if (pentaSignal){
+			iPenta = SIGNAL;
+		}
+		else{
+			iPenta = EMPTY;
+		}
+		// testing counter increment and decrement based on keyboard input
+		
 		if (input.isKeyPressed(Input.KEY_0)){
+			iPenta = SIGNAL_HIT;
+			
 			score += 5;
 		}
 		if (input.isKeyPressed(Input.KEY_9)){
+			iPenta = ERROR;
 			score -= 5;
 		}
 		

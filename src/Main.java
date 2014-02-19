@@ -21,7 +21,7 @@ public class Main {
 			// set display mode 3 args: (width px, height px, fullscreen?)
 			app.setDisplayMode(800, 600, false);
 			//Display.setInitialBackground(255, 250, 250);
-			app.setTargetFrameRate(60); // target frame rate: 60fps
+			app.setTargetFrameRate(80); // target frame rate: 60fps
 			
 			app.start();
 		} catch (SlickException e) {
