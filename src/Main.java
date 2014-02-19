@@ -4,7 +4,9 @@ import java.io.File;
 
 
 
+
 import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -18,7 +20,9 @@ public class Main {
 			AppGameContainer app = new AppGameContainer( new Game());
 			// set display mode 3 args: (width px, height px, fullscreen?)
 			app.setDisplayMode(800, 600, false);
+			//Display.setInitialBackground(255, 250, 250);
 			app.setTargetFrameRate(60); // target frame rate: 60fps
+			
 			app.start();
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
