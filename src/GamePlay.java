@@ -31,7 +31,9 @@ public class GamePlay extends BasicGameState{
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
 	private long minTime, maxTime, durationTime;
-	
+	GameGenerator2 myGameGen = new GameGenerator2(1);
+	Thread myThread = new Thread(myGameGen);
+	private int currentDrum = 0;
 	Color backgroundColor;
 	//boolean goBack;
 	
@@ -218,10 +220,12 @@ public class GamePlay extends BasicGameState{
 		// set initial score to zero
 		score = 0;
 		initSquare();
-		
 		initPenta();
 		initTri();
 		initCircle();
+		
+		myThread.start();
+		
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
@@ -367,9 +371,23 @@ public class GamePlay extends BasicGameState{
 		if (input.isKeyPressed(Input.KEY_V)) isCircleSignaled = true;// animation on
 		
 		*/
+		/*try {
+			Thread.sleep(50);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		
+		
+		
 		
 		try {
-			generateGame();
+			if(currentDrum != myGameGen.getDrum()){
+				resetDrums();
+			}
+			setDrums(myGameGen.getDrum());
+			currentDrum = myGameGen.getDrum();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -411,7 +429,7 @@ public class GamePlay extends BasicGameState{
 				score += 5;
 				isTriHit = true;// animation on
 			}
-			if(!isSquareSignaled){
+			if(!isTriSignaled){
 				score -= 5;
 				isTriError = true;// animation on
 			}
@@ -437,11 +455,8 @@ public class GamePlay extends BasicGameState{
 	} // end method update()
 	
 	
-	public void generateGame() throws InterruptedException{
-		minDrum = 1;
-		maxDrum = 4;
-		drum = minDrum + (int) (Math.random()*((maxDrum-minDrum)+1)); // generate drum from [1 - 4]
-		System.err.println("drum generated = "+ drum);
+	public void setDrums(int drum) throws InterruptedException{
+		
 		switch (drum){
 		case 1: isSquareSignaled = true;
 			break;
@@ -453,14 +468,9 @@ public class GamePlay extends BasicGameState{
 			break;
 		
 		}// end switch
-		minTime = 2000; // 2 seconds
-		maxTime = 5000; // 5 seconds
-		durationTime = minTime + (int) (Math.random()*((maxTime-minTime)+1));
-		long startTime = System.currentTimeMillis();
-		long endTime =  startTime + durationTime;
-		System.out.println("duration of sleep = "+ durationTime +"ms");
-		Thread.sleep(durationTime);
 		
+		
+		/*
 		switch (drum){ // restore
 		case 1: isSquareSignaled = false;
 			break;
@@ -472,9 +482,23 @@ public class GamePlay extends BasicGameState{
 			break;
 		
 		}// end switch
+		*/
+		
+	}// end method setDrums()
+	
+	public void resetDrums(){
+		
+		 isSquareSignaled = false;
+			
+		isPentaSignaled = false;
+			
+		isTriSignaled = false;
+			
+		 isCircleSignaled = false;
 		
 		
-	}// end method generateGame()
+		
+	}// end method resetDrums()
 	
 	public int getID(){
 		return 1;
