@@ -20,9 +20,17 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GamePlay extends BasicGameState{
 	// assign variable to picture
 	private Image logo;
-	private Image penta;
+	private Image square, penta,tri, circle;
+	private Animation squareSignal, squareHit, squareError;
 	private Animation pentaSignal, pentaHit, pentaError;
-	boolean isPentaSignaled,isPentaHit,isPentaError;
+	private Animation triSignal, triHit, triError;
+	private Animation circleSignal, circleHit, circleError;
+	private boolean isPentaSignaled,isPentaHit,isPentaError;
+	private boolean isSquareSignaled,isSquareHit,isSquareError;
+	private boolean isTriSignaled,isTriHit,isTriError;
+	private boolean isCircleSignaled,isCircleHit,isCircleError;
+	private int minDrum, maxDrum, drum;
+	private long minTime, maxTime, durationTime;
 	
 	Color backgroundColor;
 	//boolean goBack;
@@ -64,12 +72,48 @@ public class GamePlay extends BasicGameState{
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
 		
-		try {
+		
+		/*
+		 * 
+		 * SLOW EVERYTHING DOWN BY 100 MILLIS TO MAKE ANIMATIONS SMOOTHER
+		 */
+		try { 
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		
+		//Square Logic
+		
+				if(isSquareHit && isSquareSignaled){ // signaled and hit
+					squareSignal.stopAt(1);
+					squareHit.draw(50, 400, 150, 150);
+					squareHit.stopAt(1);
+					isSquareHit = false;
+					
+				}
+				else if (isSquareSignaled){ // signal on
+					
+					squareSignal.draw(50, 400, 150, 150);
+					
+				}
+				else if (!isSquareSignaled && isSquareError){ // no signal, hit in error
+					squareSignal.stopAt(0);
+					squareError.draw(50, 400, 150, 150);
+					squareError.stopAt(1);
+					isSquareError = false;
+					
+				}
+				else if (!isSquareSignaled){  // empty (no signal)
+					square.draw(50, 400, 150, 150);
+					
+				}
+		
+		
+		
 		
 		//Pentagon Logic
 		if(isPentaHit && isPentaSignaled){ // signaled and hit
@@ -93,11 +137,50 @@ public class GamePlay extends BasicGameState{
 			penta.draw(200, 200, 150, 150);
 				
 			}
-		 /*
-		else if (!isPentaSignaled){
-			penta.draw(200,200,150,150);
-		}
-		*/
+		//Tri Logic
+				if(isTriHit && isTriSignaled){ // signaled and hit -- working!
+					triSignal.stopAt(1);
+					triHit.draw(400, 300, 150, 150);
+					triHit.stopAt(1);
+					isTriHit = false;
+				}
+				else if (isTriSignaled){ // signal on
+					
+					triSignal.draw(400, 300, 150, 150);
+					
+				}
+				else if (!isTriSignaled && isTriError){ // no signal, hit in error
+					triSignal.stopAt(0);
+					triError.draw(400, 300, 150, 150);
+					triError.stopAt(1);
+					isTriError = false;
+				}
+				else if (!isTriSignaled){  // empty (no signal)
+					tri.draw(400, 300, 150, 150);
+						
+				}		
+				// Circle Logic
+				if(isCircleHit && isCircleSignaled){ // signaled and hit
+					circleSignal.stopAt(1);
+					circleHit.draw(600, 400, 150, 150);
+					circleHit.stopAt(1);
+					isCircleHit = false;
+				}
+				else if (isCircleSignaled){ // signal on
+					
+					circleSignal.draw(600, 400, 150, 150);
+					
+				}
+				else if (!isCircleSignaled && isCircleError){ // no signal, hit in error
+					circleSignal.stopAt(0);
+					circleError.draw(600, 400, 150, 150);
+					circleError.stopAt(1);
+					isCircleError = false;
+				}
+				else if (!isCircleSignaled){  // empty (no signal)
+					circle.draw(600, 400, 150, 150);
+						
+					}		 
 		
 		
 		
@@ -128,53 +211,103 @@ public class GamePlay extends BasicGameState{
 		backgroundColor = new Color(255, 250, 250);
 		// associate variables to image files:
 		logo = new Image("res/Logo.png");
+		square = new Image("res/Drums/square empty.png");
 		penta = new Image("res/Drums/pentagon empty.png");
+		tri = new Image("res/Drums/triangle empty.png");
+		circle = new Image("res/Drums/circle empty.png");
 		// set initial score to zero
 		score = 0;
+		initSquare();
 		
-		// pentagon Empty --> Unpressed (signal)
-		Image [] pentaSignalImages = { new Image("res/Drums/pentagon empty.png"), new Image("res/Drums/pentagon unpressed.png")};
-		int [] pentaSignalDurations = {200, 50000};
-		pentaSignal = new Animation(pentaSignalImages, pentaSignalDurations, false);
-		
-		
-		
-		// pentagon Unpressed --> Pressed (hit)
-		Image [] pentaHitImages = { new Image("res/Drums/pentagon unpressed.png"), new Image("res/Drums/pentagon pressed.png")};
-		int [] pentaHitDurations = {50, 200};
-		pentaHit = new Animation(pentaHitImages, pentaHitDurations, false);
-		
-		
-		// pentagon Empty --> Red (error)
-		Image [] pentaErrorImages = { new Image("res/Drums/pentagon empty.png"), new Image("res/Drums/pentagon red.png")};
-		int [] pentaErrorDurations = {50, 300};
-		pentaError = new Animation(pentaErrorImages, pentaErrorDurations, false);
-		
-		/*
-		 * using the  strip-reveal technique
-		 * 
-		 * 
-		penta = new Image("res/Drums/pentagon strip.png");
-		//initialize signals to false(off)
-		pentaSignal =false;
-		iPenta = 1;
-		// locations of images on screen:
-		pentaX1 = 200;
-		pentaY1 = 200;
-		pentaX2 = 350;
-		pentaY2 = 350;
-		// reveal parts of strip -- initially first picture on strip
-		pentaStripX1 = 0; // this should change to access different image on strip
-		pentaStripY1 = 0;
-		pentaStripX2 = 694; // this should change to access different image on strip
-		pentaStripY2 = 660; 
-		*/
+		initPenta();
+		initTri();
+		initCircle();
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
 		
 		
 	}
+	public void initSquare() throws SlickException {
+		isSquareSignaled = false;
+		// square Empty --> Unpressed (signal)
+			Image [] squareSignalImages = { new Image("res/Drums/square empty.png"), new Image("res/Drums/square unpressed.png")};
+			int [] squareSignalDurations = {200, 50000};
+			squareSignal = new Animation(squareSignalImages, squareSignalDurations, false);
+			
+			
+			
+			// square Unpressed --> Pressed (hit)
+			Image [] squareHitImages = { new Image("res/Drums/square unpressed.png"), new Image("res/Drums/square pressed.png")};
+			int [] squareHitDurations = {50, 200};
+			squareHit = new Animation(squareHitImages, squareHitDurations, false);
+			
+			
+			// square Empty --> Red (error)
+			Image [] squareErrorImages = { new Image("res/Drums/square empty.png"), new Image("res/Drums/square red.png")};
+			int [] squareErrorDurations = {50, 300};
+			squareError = new Animation(squareErrorImages, squareErrorDurations, false);
+}
+	public void initPenta() throws SlickException {
+		isPentaSignaled = false;
+			// pentagon Empty --> Unpressed (signal)
+				Image [] pentaSignalImages = { new Image("res/Drums/pentagon empty.png"), new Image("res/Drums/pentagon unpressed.png")};
+				int [] pentaSignalDurations = {200, 50000};
+				pentaSignal = new Animation(pentaSignalImages, pentaSignalDurations, false);
+				
+				
+				
+				// pentagon Unpressed --> Pressed (hit)
+				Image [] pentaHitImages = { new Image("res/Drums/pentagon unpressed.png"), new Image("res/Drums/pentagon pressed.png")};
+				int [] pentaHitDurations = {50, 200};
+				pentaHit = new Animation(pentaHitImages, pentaHitDurations, false);
+				
+				
+				// pentagon Empty --> Red (error)
+				Image [] pentaErrorImages = { new Image("res/Drums/pentagon empty.png"), new Image("res/Drums/pentagon red.png")};
+				int [] pentaErrorDurations = {50, 300};
+				pentaError = new Animation(pentaErrorImages, pentaErrorDurations, false);
+	}
+	public void initTri() throws SlickException {
+		isTriSignaled = false;
+		// triangle Empty --> Unpressed (signal)
+			Image [] triSignalImages = { new Image("res/Drums/triangle empty.png"), new Image("res/Drums/triangle unpressed.png")};
+			int [] triSignalDurations = {200, 50000};
+			triSignal = new Animation(triSignalImages, triSignalDurations, false);
+			
+			
+			
+			// triangle Unpressed --> Pressed (hit)
+			Image [] triHitImages = { new Image("res/Drums/triangle unpressed.png"), new Image("res/Drums/triangle pressed.png")};
+			int [] triHitDurations = {50, 200};
+			triHit = new Animation(triHitImages, triHitDurations, false);
+			
+			
+			// triangle Empty --> Red (error)
+			Image [] triErrorImages = { new Image("res/Drums/triangle empty.png"), new Image("res/Drums/triangle red.png")};
+			int [] triErrorDurations = {50, 300};
+			triError = new Animation(triErrorImages, triErrorDurations, false);
+}
+	public void initCircle() throws SlickException {
+		isCircleSignaled = false;
+		// circle Empty --> Unpressed (signal)
+			Image [] circleSignalImages = { new Image("res/Drums/circle empty.png"), new Image("res/Drums/circle unpressed.png")};
+			int [] circleSignalDurations = {200, 50000};
+			circleSignal = new Animation(circleSignalImages, circleSignalDurations, false);
+			
+			
+			
+			// circle Unpressed --> Pressed (hit)
+			Image [] circleHitImages = { new Image("res/Drums/circle unpressed.png"), new Image("res/Drums/circle pressed.png")};
+			int [] circleHitDurations = {50, 200};
+			circleHit = new Animation(circleHitImages, circleHitDurations, false);
+			
+			
+			// pentagon Empty --> Red (error)
+			Image [] circleErrorImages = { new Image("res/Drums/circle empty.png"), new Image("res/Drums/circle red.png")};
+			int [] circleErrorDurations = {50, 300};
+			circleError = new Animation(circleErrorImages, circleErrorDurations, false);
+}	
 	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
@@ -182,8 +315,16 @@ public class GamePlay extends BasicGameState{
 	// USER INPUT GOES HERE
 	public void update(GameContainer gc, StateBasedGame sbg, int t) throws SlickException {
 		
+		
+		
+		
+		
 		// to get input from game container
 		Input input = gc.getInput();
+		
+		
+		
+		
 		
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
@@ -191,71 +332,149 @@ public class GamePlay extends BasicGameState{
 					sbg.enterState(0);
 				}
 		// to adjust animations to frame rate
-		pentaSignal.update(t);
+		
+		squareSignal.update(t);
+		squareError.update(t);
+		squareHit.update(t);	
+			
+	    pentaSignal.update(t);
 		pentaError.update(t);
 		pentaHit.update(t);
 		
+		triSignal.update(t);
+		triError.update(t);
+		triHit.update(t);		
+		
+		circleSignal.update(t);
+		circleError.update(t);
+		circleHit.update(t);	
+		
+		
 		
 		/*
 		 * 
-		 * THE FOLLOWING SIMULATES INPUT DRUM PADS AND DRUM SIGNALS
+		 * THE FOLLOWING SIMULATES SIGNALS TO HIT DRUMS
 		 */
-		if (input.isKeyPressed(Input.KEY_1)) isPentaSignaled = false;// animation off
-		if (input.isKeyPressed(Input.KEY_2)) isPentaSignaled = true;// animation on
+		/*
+		if (input.isKeyPressed(Input.KEY_A)) isSquareSignaled = false;// animation off
+		if (input.isKeyPressed(Input.KEY_Z)) isSquareSignaled = true;// animation on
 		
-		if (input.isKeyPressed(Input.KEY_9) ){
-			score += 5;
-			isPentaHit = true;// animation on
+		if (input.isKeyPressed(Input.KEY_S)) isPentaSignaled = false;// animation off
+		if (input.isKeyPressed(Input.KEY_X)) isPentaSignaled = true;// animation on
+		if (input.isKeyPressed(Input.KEY_D)) isTriSignaled = false;// animation off
+		if (input.isKeyPressed(Input.KEY_C)) isTriSignaled = true;// animation on
+		if (input.isKeyPressed(Input.KEY_F)) isCircleSignaled = false;// animation off
+		if (input.isKeyPressed(Input.KEY_V)) isCircleSignaled = true;// animation on
+		
+		*/
+		
+		try {
+			generateGame();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	
-		if (input.isKeyPressed(Input.KEY_6) ){
-			score -= 5;
-			isPentaError = true;// animation on
-		}
-		
-		
 		
 		
 		/*
+		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
 		 * 
-		 * SOME MOVEMENT CONTROLLED BY D-PAD
-		 * 
-		Input input = gc.getInput();
-		if(input.isKeyDown(Input.KEY_RIGHT)){
-			x += 0.1*t;
+		 */
+		
+		// square
+		if (input.isKeyPressed(Input.KEY_7)){
+			if(isSquareSignaled){
+				score += 5;
+				isSquareHit = true;// animation on
+			}
+			if(!isSquareSignaled){
+				score -= 5;
+				isSquareError = true;// animation on
+			}
+
 		}
-		if(input.isKeyDown(Input.KEY_LEFT)){
-			x -= 0.1*t;
+		// pentagon
+		if (input.isKeyPressed(Input.KEY_8)){
+			if(isPentaSignaled){
+				score += 5;
+				isPentaHit = true;// animation on
+			}
+			if(!isPentaSignaled){
+				score -= 5;
+				isPentaError = true;// animation on
+			}
+
 		}
-		if(input.isKeyDown(Input.KEY_UP)){
-			y -= 0.1*t;
+		// triangle
+		if (input.isKeyPressed(Input.KEY_9)){
+			if(isTriSignaled){
+				score += 5;
+				isTriHit = true;// animation on
+			}
+			if(!isSquareSignaled){
+				score -= 5;
+				isTriError = true;// animation on
+			}
+
 		}
-		if(input.isKeyDown(Input.KEY_DOWN)){
-			y += 0.1*t;
+		// circle
+		if (input.isKeyPressed(Input.KEY_0)){
+			if(isCircleSignaled){
+				score += 5;
+				isCircleHit = true;// animation on
+			}
+			if(!isCircleSignaled){
+				score -= 5;
+				isCircleError = true;// animation on
+			}
+
 		}
-		*/
 		
 		
-		/*
-		 * SOME AUTOMATIC PENTAGON MOVEMENT HORIZONTAL BACK AND FORTH:
-		 * 
-		if(x<=400 && goBack==false){
-			x += 0.1*t;
-		}
-		if(x>=400){
-			goBack = true;
-		}
-		if(x<=30){
-			goBack= false;
-		}
-		if (goBack){
-			x -=0.2*t;
-		}
 		
-		*/
 		
 		
 	} // end method update()
+	
+	
+	public void generateGame() throws InterruptedException{
+		minDrum = 1;
+		maxDrum = 4;
+		drum = minDrum + (int) (Math.random()*((maxDrum-minDrum)+1)); // generate drum from [1 - 4]
+		System.err.println("drum generated = "+ drum);
+		switch (drum){
+		case 1: isSquareSignaled = true;
+			break;
+		case 2: isPentaSignaled = true;
+			break;
+		case 3: isTriSignaled = true;
+			break;
+		case 4: isCircleSignaled = true;
+			break;
+		
+		}// end switch
+		minTime = 2000; // 2 seconds
+		maxTime = 5000; // 5 seconds
+		durationTime = minTime + (int) (Math.random()*((maxTime-minTime)+1));
+		long startTime = System.currentTimeMillis();
+		long endTime =  startTime + durationTime;
+		System.out.println("duration of sleep = "+ durationTime +"ms");
+		Thread.sleep(durationTime);
+		
+		switch (drum){ // restore
+		case 1: isSquareSignaled = false;
+			break;
+		case 2: isPentaSignaled = false;
+			break;
+		case 3: isTriSignaled = false;
+			break;
+		case 4: isCircleSignaled = false;
+			break;
+		
+		}// end switch
+		
+		
+	}// end method generateGame()
 	
 	public int getID(){
 		return 1;
