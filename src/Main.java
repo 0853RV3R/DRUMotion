@@ -6,15 +6,12 @@ import java.io.File;
 
 
 
-<<<<<<< HEAD
 
 
-
-=======
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Game;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -48,8 +45,8 @@ public class Main extends StateBasedGame {
 	}
 	
 	public void initStatesList(GameContainer gc) throws SlickException{
-		this.addState(new Game());
-		this.addState(new HomeScreen());
-		
+		// this ordering determines the startup state
+		this.addState(new Home());
+		this.addState(new GamePlay());
 	}
 }

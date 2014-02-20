@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-import org.lwjgl.input.Mouse;
-=======
 
 
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -12,35 +9,31 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-<<<<<<< HEAD
+
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-=======
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.gui.TextField;
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
+
+
 
 // every Slick2D window or game extends from the basic game class, provided by Slick2D
 // A basic scene:
-public class Game extends BasicGameState{
+public class GamePlay extends BasicGameState{
 	// assign variable to picture
 	private Image logo;
 	private Image penta;
-<<<<<<< HEAD
-	private Image exitButton;
+
+	
 	private float x,y;
 	boolean goBack;
-	private int posX = Mouse.getX();
-	private int posY = Mouse.getY();
-=======
+	
+
 	private float pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2;
 	Color backgroundColor;
 	//boolean goBack;
 	
 	Font font;
 	int score;
-	TrueTypeFont ttf;
+	
 	int iPenta; // to increment through penta PNG strip values [1-4]
 	boolean pentaSignal,triSignal,squareSignal,circleSignal;
 	// signals
@@ -48,9 +41,9 @@ public class Game extends BasicGameState{
 	final int SIGNAL = 2;
 	final int SIGNAL_HIT = 3; 
 	final int ERROR = 4; // they hit the drum, but it was not signaled
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
+
 	
-	public Game() {
+	public GamePlay() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -60,17 +53,7 @@ public class Game extends BasicGameState{
 	// Slick coordinate system: (0,0) is top left corner! --> Y axis extends down, X extends right
 	public void render(GameContainer gc, StateBasedGame sgb, Graphics g) throws SlickException {
 		// TODO Auto-generated method stub
-<<<<<<< HEAD
-		g.drawOval(300, 350, 80, 80);
-		logo.draw(180,25,450,130);
-		penta.draw(x,y,150,150);
-		
-		//test
-		g.drawString("position x,y " + posX, posX, posY);
 
-		
-		exitButton.draw(500,500,200,50);
-=======
 		g.setBackground(backgroundColor);
 		logo.draw(280,25,450,130);
 		
@@ -85,31 +68,16 @@ public class Game extends BasicGameState{
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
 		
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
+
 	}
 
 	
 	// init is like a constructor for Slick 2D
 	// called before the start - only called once
 	// do the picture loading/ import images here!
-<<<<<<< HEAD
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		// associate variables to image files
-		
-		logo = new Image("res/Logo.png");
-		penta = new Image("res/pentagon empty.png");
-		x = 30;
-		y= 200;
-		goBack=false;
-		
-		exitButton = new Image("res/Exit button unclicked.png");
-		x = 800;
-		y = 600;
-		
-		
-=======
+
 	@Override
-	public void init(GameContainer gc) throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		// set background color to white:
 		backgroundColor = new Color(255, 250, 250);
 		// associate variables to image files:
@@ -133,8 +101,7 @@ public class Game extends BasicGameState{
 		
 		// set initial score to zero
 		score = 0;
-		//goBack=false;
->>>>>>> 95061b2db297b2cb544f0e32ed67c9586d3cb6b1
+
 	}
 	
 	// update: called every frame update, BEFORE render method
