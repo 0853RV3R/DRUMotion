@@ -65,10 +65,10 @@ public class GamePlay extends BasicGameState{
 		
 		/*
 		 * 
-		 * SLOW EVERYTHING DOWN BY 100 MILLIS TO MAKE ANIMATIONS SMOOTHER
+		 * SLOW EVERYTHING DOWN BY 80 MILLIS TO MAKE ANIMATIONS SMOOTHER
 		 */
 		try { 
-			Thread.sleep(100);
+			Thread.sleep(80);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
