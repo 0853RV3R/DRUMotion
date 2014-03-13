@@ -4,5 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jar/lwjgl.jar"/>
 	<classpathentry kind="lib" path="jar/slick.jar"/>
+	<classpathentry kind="lib" path="jar/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="jar/jorbis-0.0.17-1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
