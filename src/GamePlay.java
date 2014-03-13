@@ -31,8 +31,8 @@ public class GamePlay extends BasicGameState{
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
 	private long minTime, maxTime, durationTime;
-	GameGenerator2 myGameGen = new GameGenerator2(1);
-	Thread myThread = new Thread(myGameGen);
+	GameGenerator2 myGameGen;
+	Thread myThread;
 	private int currentDrum = 0;
 	Color backgroundColor;
 	//boolean goBack;
@@ -202,8 +202,20 @@ public class GamePlay extends BasicGameState{
 		initTri();
 		initCircle();
 		
-		myThread.start();
+		/*
+		 * Initialize Thread
+		 */
+		myGameGen = new GameGenerator2(1);// runnable task
+		myThread = new Thread(myGameGen); // run the runnable task in a thread
 		
+		if (sbg.getCurrentStateID() == 1){
+		System.out.println("***Starting Thread in GamePlay***");
+		
+		myThread.start(); // start thread
+		}
+		else{
+			System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
+			}
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
@@ -297,7 +309,22 @@ public class GamePlay extends BasicGameState{
 	// USER INPUT GOES HERE
 	public void update(GameContainer gc, StateBasedGame sbg, int t) throws SlickException {
 		
+		/* thread business:
+		 If game state is correct and myThread is NOT started, then start new thread
+		 Else if Game state is correct and myThread IS started, then do nothing
+		*/
 		
+		if (sbg.getCurrentStateID() == 1 && !myThread.isAlive()){ 
+			System.out.println("***Starting Thread in GamePlay***");
+			
+			myThread.start(); // start thread
+			}
+		else if (sbg.getCurrentStateID() == 1 && myThread.isAlive()){
+			// nothing to do here
+		}
+		else{
+				System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
+			}
 		
 		
 		
