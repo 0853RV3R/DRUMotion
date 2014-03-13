@@ -46,7 +46,7 @@ public class Main extends StateBasedGame {
 	
 	public void initStatesList(GameContainer gc) throws SlickException{
 		// this ordering determines the startup state
-		this.addState(new Home());
+		//this.addState(new Home());
 		this.addState(new GamePlay());
 		this.addState(new NewUser());
 		this.addState(new UserScreen());
