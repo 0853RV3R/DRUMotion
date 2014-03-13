@@ -42,19 +42,7 @@ public class GamePlay extends BasicGameState{
 	
 	
 	
-	/*
-	 * signals for strip-reveal technique
-	 * 
-	 * 
-	 *
-	private float pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2;
-	int iPenta; // to increment through penta PNG strip values [1-4]
-	boolean pentaSignal,triSignal,squareSignal,circleSignal;
-	final int EMPTY = 1; // not signaled, not hit
-	final int SIGNAL = 2;
-	final int SIGNAL_HIT = 3; 
-	final int ERROR = 4; // they hit the drum, but it was not signaled
-	 */
+	
 	
 	public GamePlay() {
 		super();
@@ -185,16 +173,6 @@ public class GamePlay extends BasicGameState{
 					}		 
 		
 		
-		
-		/* 
-		 * using the  strip-reveal technique
-		 */
-		/*
-		// modify the pentaStripX# for showing a portion of the .PNG strip
-		pentaStripX1 = 694*(iPenta-1);
-		pentaStripX2 = 694*iPenta;
-		penta.draw(pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2);
-		*/
 		
 		
 	
@@ -332,11 +310,18 @@ public class GamePlay extends BasicGameState{
 		
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
+					// first stop thread
+					myGameGen.setStopFlag(true);
+					try {
+						myThread.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					// go to home
 					sbg.enterState(0);
 				}
 		// to adjust animations to frame rate
-		
 		squareSignal.update(t);
 		squareError.update(t);
 		squareHit.update(t);	
