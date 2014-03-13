@@ -1,3 +1,4 @@
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -9,20 +10,20 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-public class Home  extends BasicGameState{
+public class UserScreen  extends BasicGameState{
 	
 	private Image Background;
-	private boolean newUserClick = false;
-	private boolean loginClick = false;
+	private boolean pickSongClick = false;
+	private boolean progressClick, logoutClick = false;
 	
-	public Home() {
+	public UserScreen() {
 		super();
 	}
 
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Home Screen.png");		
+		Background = new Image("res/Screens/Main Screen.png");		
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -33,11 +34,15 @@ public class Home  extends BasicGameState{
 
 		//See if they click continue or back
 		if  (125 <= x && x <= 375 && 255 <= y && y <= 405){
-			newUserClick = true;
+			pickSongClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (440 <= x && x <= 690 && 255 <= y && y <= 404){
-			loginClick = true;
+		if  (440 <= x && x <= 690 && 255 <= y && y <= 405){
+			progressClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (10 <= x && x <= 180 && 450 <= y && y <= 580){
+			logoutClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 	}
@@ -55,21 +60,26 @@ public class Home  extends BasicGameState{
 		
 		Input input = gc.getInput();
 		
-		if(  newUserClick){
+		if(  pickSongClick){
 			// go to pick song
-			newUserClick = false;
-			sbg.enterState(2);
+			pickSongClick = false;
+			sbg.enterState(5);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || loginClick){
+		if( progressClick){
 			// go to home
-			loginClick = false;
-			sbg.enterState(3);
+			progressClick = false;
+			sbg.enterState(7);
+		}
+		if( input.isKeyPressed(Input.KEY_BACK) || logoutClick){
+			// go to home
+			logoutClick = false;
+			sbg.enterState(0);
 		}
 	}
 
 	
 	public int getID() {
-		return 0;
+		return 6;
 	}
 
 }

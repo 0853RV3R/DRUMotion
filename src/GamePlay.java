@@ -154,9 +154,10 @@ public class GamePlay extends BasicGameState{
 		*/
 		
 		// if back is pressed go to HomeScene
-		if( input.isKeyDown(Input.KEY_BACK) ){
+		if( input.isKeyPressed(Input.KEY_BACK) ){
 			// go to home
-			sbg.enterState(0);
+			
+			sbg.enterState(6);
 		}
 		/*
 		 * SOME AUTOMATIC PENTAGON MOVEMENT HORIZONTAL BACK AND FORTH:

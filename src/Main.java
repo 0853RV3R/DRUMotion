@@ -48,5 +48,11 @@ public class Main extends StateBasedGame {
 		// this ordering determines the startup state
 		this.addState(new Home());
 		this.addState(new GamePlay());
+		this.addState(new NewUser());
+		this.addState(new UserScreen());
+		this.addState(new Login());
+		this.addState(new Statistics());
+		this.addState(new PickSong());
+		this.addState(new Progress());
 	}
 }

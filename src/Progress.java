@@ -9,20 +9,19 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-public class Home  extends BasicGameState{
+public class Progress  extends BasicGameState{
 	
 	private Image Background;
-	private boolean newUserClick = false;
-	private boolean loginClick = false;
+	private boolean backClick = false;
 	
-	public Home() {
+	public Progress() {
 		super();
 	}
 
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Home Screen.png");		
+		Background = new Image("res/Screens/Progress.png");		
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -32,12 +31,8 @@ public class Home  extends BasicGameState{
 		System.out.println( "x = " + x + "  y = " +y);
 
 		//See if they click continue or back
-		if  (125 <= x && x <= 375 && 255 <= y && y <= 405){
-			newUserClick = true;
-			System.out.println( "x = " + x + "  y = " +y);
-		}
-		if  (440 <= x && x <= 690 && 255 <= y && y <= 404){
-			loginClick = true;
+		if  (10 <= x && x <= 180 && 450 <= y && y <= 580){
+			backClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 	}
@@ -55,21 +50,16 @@ public class Home  extends BasicGameState{
 		
 		Input input = gc.getInput();
 		
-		if(  newUserClick){
-			// go to pick song
-			newUserClick = false;
-			sbg.enterState(2);
-		}
-		if( input.isKeyPressed(Input.KEY_BACK) || loginClick){
+		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to home
-			loginClick = false;
-			sbg.enterState(3);
+			backClick = false;
+			sbg.enterState(6);
 		}
 	}
 
 	
 	public int getID() {
-		return 0;
+		return 7;
 	}
 
 }

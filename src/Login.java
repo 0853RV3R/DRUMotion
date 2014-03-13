@@ -9,35 +9,53 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-public class Home  extends BasicGameState{
+public class Login  extends BasicGameState{
 	
 	private Image Background;
-	private boolean newUserClick = false;
-	private boolean loginClick = false;
+	private boolean continueClick = false;
+	private boolean backClick, user1Click, user2Click, user3Click, user4Click = false;
 	
-	public Home() {
+	
+	public Login() {
 		super();
 	}
 
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Home Screen.png");		
+		Background = new Image("res/Screens/Pick a Name.png");		
 	}
 
 	public void mousePressed(int button  , int x, int y){
 		
-		//test listener
+		//test
 		
 		System.out.println( "x = " + x + "  y = " +y);
 
+		
 		//See if they click continue or back
-		if  (125 <= x && x <= 375 && 255 <= y && y <= 405){
-			newUserClick = true;
+		if  (325 <= x && x <= 495 && 485 <= y && y <= 540){
+			continueClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (440 <= x && x <= 690 && 255 <= y && y <= 404){
-			loginClick = true;
+		if  (10 <= x && x <= 180 && 490 <= y && y <= 585){
+			backClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
+			user1Click = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+			user2Click = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+			user3Click = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+			user4Click = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 	}
@@ -55,21 +73,21 @@ public class Home  extends BasicGameState{
 		
 		Input input = gc.getInput();
 		
-		if(  newUserClick){
+		if(  continueClick){
 			// go to pick song
-			newUserClick = false;
-			sbg.enterState(2);
+			continueClick = false;
+			sbg.enterState(6);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || loginClick){
+		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to home
-			loginClick = false;
-			sbg.enterState(3);
+			backClick = false;
+			sbg.enterState(0);
 		}
 	}
 
 	
 	public int getID() {
-		return 0;
+		return 3;
 	}
 
 }
