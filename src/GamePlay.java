@@ -9,7 +9,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -35,11 +37,11 @@ public class GamePlay extends BasicGameState{
 	Thread myThread;
 	private int currentDrum = 0;
 	Color backgroundColor;
-	//boolean goBack;
 	
 	Font font;
 	int score;
-	
+	Sound drumSound1, drumSound2, drumSound3, drumSound4;
+	Music song1, song2, song3, song4;
 	
 	
 	
@@ -208,6 +210,8 @@ public class GamePlay extends BasicGameState{
 		myGameGen = new GameGenerator2(1);// runnable task
 		myThread = new Thread(myGameGen); // run the runnable task in a thread
 		
+		// START THREAD here?
+		/*
 		if (sbg.getCurrentStateID() == 1){
 		System.out.println("***Starting Thread in GamePlay***");
 		
@@ -216,9 +220,17 @@ public class GamePlay extends BasicGameState{
 		else{
 			System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
 			}
+		 */
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
+		
+		/*
+		 * 
+		 * Music & Sound 
+		 */
+		initSounds();
+		initMusic();
 		
 		
 	}
@@ -303,6 +315,19 @@ public class GamePlay extends BasicGameState{
 			circleError = new Animation(circleErrorImages, circleErrorDurations, false);
 }	
 	
+	public void initSounds() throws SlickException{
+		drumSound1 = new Sound("res/Sounds/VEH2-Perc-041.ogg");
+		drumSound2 = new Sound("res/Sounds/VEH2-Perc-042.ogg");
+		drumSound3 = new Sound("res/Sounds/VEH2-Perc-043.ogg");
+		drumSound4 = new Sound("res/Sounds/VEH2-Perc-044.ogg");
+	}
+	
+	public void initMusic() throws SlickException{
+		song1 =new Music("res/Music/Younevercantell.ogg");
+		song2 = new Music("res/Music/Spindizzy.ogg");
+	}
+	
+	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
 	// 't' ensures objects move at same speed, even with different frame rates
@@ -318,6 +343,7 @@ public class GamePlay extends BasicGameState{
 			System.out.println("***Starting Thread in GamePlay***");
 			
 			myThread.start(); // start thread
+			song2.play();
 			}
 		else if (sbg.getCurrentStateID() == 1 && myThread.isAlive()){
 			// nothing to do here
@@ -412,6 +438,7 @@ public class GamePlay extends BasicGameState{
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
 			if(isSquareSignaled){
+				drumSound1.playAt(-1,0,0);
 				score += 5;
 				isSquareHit = true;// animation on
 			}
@@ -424,6 +451,7 @@ public class GamePlay extends BasicGameState{
 		// pentagon
 		if (input.isKeyPressed(Input.KEY_8)){
 			if(isPentaSignaled){
+				drumSound2.playAt(0,1,0);
 				score += 5;
 				isPentaHit = true;// animation on
 			}
@@ -436,6 +464,7 @@ public class GamePlay extends BasicGameState{
 		// triangle
 		if (input.isKeyPressed(Input.KEY_9)){
 			if(isTriSignaled){
+				drumSound3.playAt(0,0.5f,0.5f);
 				score += 5;
 				isTriHit = true;// animation on
 			}
@@ -448,6 +477,7 @@ public class GamePlay extends BasicGameState{
 		// circle
 		if (input.isKeyPressed(Input.KEY_0)){
 			if(isCircleSignaled){
+				drumSound4.playAt(0,0,-1);
 				score += 5;
 				isCircleHit = true;// animation on
 			}
