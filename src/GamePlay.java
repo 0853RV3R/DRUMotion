@@ -9,7 +9,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -31,30 +33,18 @@ public class GamePlay extends BasicGameState{
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
 	private long minTime, maxTime, durationTime;
-	GameGenerator2 myGameGen = new GameGenerator2(1);
-	Thread myThread = new Thread(myGameGen);
+	GameGenerator2 myGameGen;
+	Thread myThread;
 	private int currentDrum = 0;
 	Color backgroundColor;
-	//boolean goBack;
 	
 	Font font;
 	int score;
+	Sound drumSound1, drumSound2, drumSound3, drumSound4;
+	Music song1, song2, song3, song4;
 	
 	
 	
-	/*
-	 * signals for strip-reveal technique
-	 * 
-	 * 
-	 *
-	private float pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2;
-	int iPenta; // to increment through penta PNG strip values [1-4]
-	boolean pentaSignal,triSignal,squareSignal,circleSignal;
-	final int EMPTY = 1; // not signaled, not hit
-	final int SIGNAL = 2;
-	final int SIGNAL_HIT = 3; 
-	final int ERROR = 4; // they hit the drum, but it was not signaled
-	 */
 	
 	public GamePlay() {
 		super();
@@ -77,10 +67,10 @@ public class GamePlay extends BasicGameState{
 		
 		/*
 		 * 
-		 * SLOW EVERYTHING DOWN BY 100 MILLIS TO MAKE ANIMATIONS SMOOTHER
+		 * SLOW EVERYTHING DOWN BY 80 MILLIS TO MAKE ANIMATIONS SMOOTHER
 		 */
 		try { 
-			Thread.sleep(100);
+			Thread.sleep(80);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -186,16 +176,6 @@ public class GamePlay extends BasicGameState{
 		
 		
 		
-		/* 
-		 * using the  strip-reveal technique
-		 */
-		/*
-		// modify the pentaStripX# for showing a portion of the .PNG strip
-		pentaStripX1 = 694*(iPenta-1);
-		pentaStripX2 = 694*iPenta;
-		penta.draw(pentaX1,pentaY1,pentaX2,pentaY2,pentaStripX1,pentaStripY1,pentaStripX2,pentaStripY2);
-		*/
-		
 		
 	
 		
@@ -224,11 +204,33 @@ public class GamePlay extends BasicGameState{
 		initTri();
 		initCircle();
 		
-		myThread.start();
+		/*
+		 * Initialize Thread
+		 */
+		myGameGen = new GameGenerator2(1);// runnable task
+		myThread = new Thread(myGameGen); // run the runnable task in a thread
 		
+		// START THREAD here?
+		/*
+		if (sbg.getCurrentStateID() == 1){
+		System.out.println("***Starting Thread in GamePlay***");
+		
+		myThread.start(); // start thread
+		}
+		else{
+			System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
+			}
+		 */
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
+		
+		/*
+		 * 
+		 * Music & Sound 
+		 */
+		initSounds();
+		initMusic();
 		
 		
 	}
@@ -313,13 +315,42 @@ public class GamePlay extends BasicGameState{
 			circleError = new Animation(circleErrorImages, circleErrorDurations, false);
 }	
 	
+	public void initSounds() throws SlickException{
+		drumSound1 = new Sound("res/Sounds/VEH2-Perc-041.ogg");
+		drumSound2 = new Sound("res/Sounds/VEH2-Perc-042.ogg");
+		drumSound3 = new Sound("res/Sounds/VEH2-Perc-043.ogg");
+		drumSound4 = new Sound("res/Sounds/VEH2-Perc-044.ogg");
+	}
+	
+	public void initMusic() throws SlickException{
+		song1 =new Music("res/Music/Younevercantell.ogg");
+		song2 = new Music("res/Music/Spindizzy.ogg");
+	}
+	
+	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
 	// 't' ensures objects move at same speed, even with different frame rates
 	// USER INPUT GOES HERE
 	public void update(GameContainer gc, StateBasedGame sbg, int t) throws SlickException {
 		
+		/* thread business:
+		 If game state is correct and myThread is NOT started, then start new thread
+		 Else if Game state is correct and myThread IS started, then do nothing
+		*/
 		
+		if (sbg.getCurrentStateID() == 1 && !myThread.isAlive()){ 
+			System.out.println("***Starting Thread in GamePlay***");
+			
+			myThread.start(); // start thread
+			song2.play();
+			}
+		else if (sbg.getCurrentStateID() == 1 && myThread.isAlive()){
+			// nothing to do here
+		}
+		else{
+				System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
+			}
 		
 		
 		
@@ -332,11 +363,18 @@ public class GamePlay extends BasicGameState{
 		
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
+					// first stop thread
+					myGameGen.setStopFlag(true);
+					try {
+						myThread.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					// go to home
 					sbg.enterState(3);
 				}
 		// to adjust animations to frame rate
-		
 		squareSignal.update(t);
 		squareError.update(t);
 		squareHit.update(t);	
@@ -400,6 +438,7 @@ public class GamePlay extends BasicGameState{
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
 			if(isSquareSignaled){
+				drumSound1.playAt(-1,0,0);
 				score += 5;
 				isSquareHit = true;// animation on
 			}
@@ -412,6 +451,7 @@ public class GamePlay extends BasicGameState{
 		// pentagon
 		if (input.isKeyPressed(Input.KEY_8)){
 			if(isPentaSignaled){
+				drumSound2.playAt(0,1,0);
 				score += 5;
 				isPentaHit = true;// animation on
 			}
@@ -424,6 +464,7 @@ public class GamePlay extends BasicGameState{
 		// triangle
 		if (input.isKeyPressed(Input.KEY_9)){
 			if(isTriSignaled){
+				drumSound3.playAt(0,0.5f,0.5f);
 				score += 5;
 				isTriHit = true;// animation on
 			}
@@ -436,6 +477,7 @@ public class GamePlay extends BasicGameState{
 		// circle
 		if (input.isKeyPressed(Input.KEY_0)){
 			if(isCircleSignaled){
+				drumSound4.playAt(0,0,-1);
 				score += 5;
 				isCircleHit = true;// animation on
 			}

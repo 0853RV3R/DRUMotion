@@ -29,7 +29,7 @@ public class Home  extends BasicGameState{
 		
 		//test listener
 		
-		System.out.println( "x = " + x + "  y = " +y);
+		System.out.println( "Mouse Pressed at: "+"x = " + x + ",  y = " +y);
 
 		//See if they click continue or back
 		if  (125 <= x && x <= 375 && 255 <= y && y <= 405){
