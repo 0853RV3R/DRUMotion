@@ -333,7 +333,7 @@ public class GamePlay extends BasicGameState{
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					// go to home
-					sbg.enterState(0);
+					sbg.enterState(3);
 				}
 		// to adjust animations to frame rate
 		
