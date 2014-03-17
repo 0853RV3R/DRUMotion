@@ -13,6 +13,7 @@ public class Progress  extends BasicGameState{
 	
 	private Image Background;
 	private boolean backClick = false;
+	int gamesPlayed, percentage, hits, misses;
 	
 	public Progress() {
 		super();
@@ -21,7 +22,9 @@ public class Progress  extends BasicGameState{
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Progress.png");		
+		Background = new Image("res/Screens/Progress.png");	
+		
+		
 	}
 
 	public void mousePressed(int button  , int x, int y){
