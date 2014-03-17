@@ -17,8 +17,12 @@ public class Login  extends BasicGameState{
 	private boolean continueClick = false;
 	private boolean backClick, user1Click, user2Click, user3Click, user4Click, upClick, downClick = false;
 	String User_1, User_2, User_3, User_4, User_5, User_6, du1, du2, du3, du4;
+
 	private int highlight;
 	int user;
+
+	ArrayList<String> names = new ArrayList<String>();
+
 	
 	
 	public Login() {
@@ -38,7 +42,6 @@ public class Login  extends BasicGameState{
 		//Get users from Database
 		Connection c = null;
 	    Statement stmt = null;
-	    ArrayList<String> names = new ArrayList<String>();
 	    
 	    try {
 	      Class.forName("org.sqlite.JDBC");
@@ -60,30 +63,30 @@ public class Login  extends BasicGameState{
 	    }
 		
 	    switch(names.size()){
-	    case 0:
-	    	du1 = du2 = du3 = du4 = "";
-	    	break;
-	    case 1:
-	    	du1 = names.get(0);
-	    	du2 = du3 = du4 = "";
-	    	break;
-	    case 2:
-	    	du1 = names.get(0);
-			du2 = names.get(1);
-			du3 = du4 = "";
-			break;
-	    case 3:
-	    	du1 = names.get(0);
-			du2 = names.get(1);
-			du3 = names.get(2);
-			du4 = "";
-			break;
-	    default:
-	    	du1 = names.get(0);
-			du2 = names.get(1);
-			du3 = names.get(2);
-			du4 = names.get(3);
-			break;
+		    case 0:
+		    	du1 = du2 = du3 = du4 = "";
+		    	break;
+		    case 1:
+		    	du1 = names.get(0);
+		    	du2 = du3 = du4 = "";
+		    	break;
+		    case 2:
+		    	du1 = names.get(0);
+				du2 = names.get(1);
+				du3 = du4 = "";
+				break;
+		    case 3:
+		    	du1 = names.get(0);
+				du2 = names.get(1);
+				du3 = names.get(2);
+				du4 = "";
+				break;
+		    default:
+		    	du1 = names.get(0);
+				du2 = names.get(1);
+				du3 = names.get(2);
+				du4 = names.get(3);
+				break;
 	    }
 		
 	}
@@ -170,21 +173,63 @@ public class Login  extends BasicGameState{
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)
 			throws SlickException {
+
 		Input input = gc.getInput();
 		//scroll feature **** have to change this with database
-		if (upClick ||input.isKeyPressed(Input.KEY_UP) ){
+		
+
+			if (sbg.getCurrentStateID() == 3){
+				//Get users from Database
+				Connection c = null;
+				Statement stmt = null;
+
+				try {
+					Class.forName("org.sqlite.JDBC");
+					c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+					c.setAutoCommit(false);
+
+					stmt = c.createStatement();
+					ResultSet rs = stmt.executeQuery( "SELECT * FROM users;" );
+					while ( rs.next() ) {
+						String  name = rs.getString("name");
+						if(!names.contains(name))
+							names.add(name);
+					}
+					rs.close();
+					stmt.close();
+					c.close();
+				} catch ( Exception e ) {
+					System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+					System.exit(0);
+				}
+			}
+		
+		//scroll feature **** have to change this with database
+		if (downClick && !du4.equals("")){
+
 			du1 = du2;
 			du2 = du3;
 			du3 = du4;
-			du4 = User_5;
+			
+			int index = names.indexOf(du4);
+			if (names.size() > index +1)
+				du4 = names.get(index+1);
+			else
+				du4 = "";
 			upClick = false;
 			highlight += 1;
 		}
-		if (downClick || input.isKeyPressed(Input.KEY_DOWN) ){
+
+		
+
+		if (upClick && !du1.equals(names.get(0))){
+
 			du4 = du3;
 			du3 = du2;
 			du2 = du1;
-			du1 = User_6;
+			
+			int index = names.indexOf(du1);
+			du1 = names.get(index-1);
 			downClick = false;
 			highlight -= 1;
 		}
