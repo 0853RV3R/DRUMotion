@@ -141,7 +141,7 @@ public class Login  extends BasicGameState{
 		}
 		if  (660<= x && x <= 700 && 345 <= y && y <= 385){
 			refresh = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "Refresh: x = " + x + "  y = " +y);
 		}
 	}
 	
@@ -185,10 +185,8 @@ public class Login  extends BasicGameState{
 		Input input = gc.getInput();
 		//scroll feature **** have to change this with database
 		
-		if (refresh) 
+		if (refresh){ 
 			refresh = false;
-		
-			if (sbg.getCurrentStateID() == 3){
 				//Get users from Database
 				Connection c = null;
 				Statement stmt = null;
@@ -212,10 +210,38 @@ public class Login  extends BasicGameState{
 					System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 					System.exit(0);
 				}
-			}
+				
+				switch(names.size()){
+			    case 0:
+			    	du1 = du2 = du3 = du4 = "";
+			    	break;
+			    case 1:
+			    	du1 = names.get(0);
+			    	du2 = du3 = du4 = "";
+			    	break;
+			    case 2:
+			    	du1 = names.get(0);
+					du2 = names.get(1);
+					du3 = du4 = "";
+					break;
+			    case 3:
+			    	du1 = names.get(0);
+					du2 = names.get(1);
+					du3 = names.get(2);
+					du4 = "";
+					break;
+			    default:
+			    	du1 = names.get(0);
+					du2 = names.get(1);
+					du3 = names.get(2);
+					du4 = names.get(3);
+					break;
+		    }
+				downClick = true;
+		}
 		
 		//scroll feature **** have to change this with database
-		if (downClick && !du4.equals("")){
+		if (downClick && !du4.equals(names.get(names.size()-1))){
 
 			du1 = du2;
 			du2 = du3;
