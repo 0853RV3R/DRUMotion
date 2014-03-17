@@ -1,3 +1,8 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -13,7 +18,7 @@ public class Progress  extends BasicGameState{
 	
 	private Image Background;
 	private boolean backClick, editClick = false;
-	int gamesPlayed, percentage, hits, misses;
+	int gamesPlayed, percentage, hits, misses = 0;
 	
 	public Progress() {
 		super();
@@ -51,8 +56,11 @@ public class Progress  extends BasicGameState{
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1360,770);
 		
 		//write stats
-		g.setColor(Color.cyan);
-		g.drawString("GAMESPLAYED", 190, 280);
+		g.setColor(Color.darkGray);
+		g.drawString(""+gamesPlayed+"", 546, 299);
+		g.drawString(""+percentage+"", 546, 343);
+		g.drawString(""+hits+"", 546, 390);
+		g.drawString(""+misses+"", 546, 434);
 	}
 
 	
@@ -70,6 +78,32 @@ public class Progress  extends BasicGameState{
 			// go to home
 			editClick = false;
 			sbg.enterState(10);
+		}
+		
+		//Get values from Database
+		Connection c = null;
+		Statement stmt = null;
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			//TODO change username
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM users WHERE name = \"Riccardo Caimano\";" );
+			while ( rs.next() ) {
+				gamesPlayed = rs.getInt("gamesPlayed");
+				percentage = rs.getInt("percentage");
+				hits = rs.getInt("hits");
+				misses = rs.getInt("misses");
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
 		}
 	}
 
