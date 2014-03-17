@@ -109,21 +109,25 @@ public class Login  extends BasicGameState{
 		}
 		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
 			user1Click = true;
+			highlight = 1;
 			user = 1;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
 			user2Click = true;
+			highlight = 2;
 			user = 2;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
 			user3Click = true;
+			highlight = 3;
 			user = 3;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
 			user4Click = true;
+			highlight = 4;
 			user = 4;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
