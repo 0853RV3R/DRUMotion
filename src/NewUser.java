@@ -13,6 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import java.sql.*;
 
 
 public class NewUser extends BasicGameState {
@@ -23,9 +24,16 @@ public class NewUser extends BasicGameState {
 	private int keyCode;
 	String userName;
 	MyInputListener listener = new MyInputListener();
+
 	java.awt.Font UIFont1;
     org.newdawn.slick.UnicodeFont uniFont;
     
+
+	
+	//Database connection
+	Connection c = null;
+    Statement stmt = null;
+
 
     
 	public NewUser() {
@@ -92,6 +100,27 @@ public class NewUser extends BasicGameState {
 			userName = "";
 			continueClick = false;
 			sbg.enterState(6);
+			
+			//Update database with newUser
+			try {
+		      Class.forName("org.sqlite.JDBC");
+		      c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+		      c.setAutoCommit(false);
+		      
+		      stmt = c.createStatement();
+		      String name = userName.replace("?", "");
+		      name = name.replace("\n", "");
+		      String sql = "insert into users(name) values (\""+name+"\");";
+		      System.out.println(sql);
+		      stmt.executeUpdate(sql);
+		      
+		      stmt.close();
+		      c.commit();
+		      c.close();
+		    } catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		    }
 		}
 		if( backClick){
 			// go to home
