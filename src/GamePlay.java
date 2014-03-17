@@ -36,9 +36,11 @@ public class GamePlay extends BasicGameState{
 	GameGenerator2 myGameGen;
 	Thread myThread;
 	private int currentDrum = 0;
-	Color backgroundColor, fadeColor;
-	double fadeTime;
+	Color backgroundColor;
 	private boolean alert = false;
+	private int timer;
+	private int timerLast = 1500;
+	boolean fade;
 	
 	Font font;
 	int score;
@@ -87,6 +89,12 @@ public class GamePlay extends BasicGameState{
 					squareHit.stopAt(1);
 					isSquareHit = false;
 					
+					// code for score fade in and out
+					float timerPercent = (float) timer / timerLast;
+				      int alphaPercent = (int) (255 * timerPercent);
+				      g.setColor(new Color(255, 255, 255, alphaPercent));
+				      g.drawString("test", 20, 30);
+
 				}
 				else if (isSquareSignaled){ // signal on
 					
@@ -205,7 +213,6 @@ public class GamePlay extends BasicGameState{
 		initTri();
 		initCircle();
 		
-		fadeColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 		
 		
 		/*
@@ -357,6 +364,18 @@ public class GamePlay extends BasicGameState{
 				System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
 			}
 		
+		//code for score fade in and out
+		if (fade) {
+	         timer += t;
+	         if (timer > timerLast) {
+	            fade = !fade;
+	         }
+	      } else {
+	         timer -= t;
+	         if (timer < 0) {
+	            fade = !fade;
+	         }
+	      }
 		
 		
 		// to get input from game container

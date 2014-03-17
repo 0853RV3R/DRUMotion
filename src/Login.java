@@ -25,16 +25,7 @@ public class Login  extends BasicGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		Background = new Image("res/Screens/Pick a Name.png");	
-		User_1 = "User 1";
-		User_2 = "User 2";
-		User_3 = "User 3";
-		User_4 = "User 4";
-		User_5 = "User 5";
-		User_6 = "User 6";
-		du1 = User_1;
-		du2 = User_2;
-		du3 = User_3;
-		du4 = User_4;
+		
 	}
 
 	public void mousePressed(int button  , int x, int y){
