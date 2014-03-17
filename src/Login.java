@@ -7,6 +7,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import java.sql.*;
+import java.util.ArrayList;
 
 
 public class Login  extends BasicGameState{
@@ -25,16 +27,58 @@ public class Login  extends BasicGameState{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		Background = new Image("res/Screens/Pick a Name.png");	
-		User_1 = "User 1";
-		User_2 = "User 2";
-		User_3 = "User 3";
-		User_4 = "User 4";
-		User_5 = "User 5";
-		User_6 = "User 6";
-		du1 = User_1;
-		du2 = User_2;
-		du3 = User_3;
-		du4 = User_4;
+		
+		//Get users from Database
+		Connection c = null;
+	    Statement stmt = null;
+	    ArrayList<String> names = new ArrayList<String>();
+	    
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+	      c.setAutoCommit(false);
+
+	      stmt = c.createStatement();
+	      ResultSet rs = stmt.executeQuery( "SELECT * FROM users;" );
+	      while ( rs.next() ) {
+	         String  name = rs.getString("name");
+	         names.add(name);
+	      }
+	      rs.close();
+	      stmt.close();
+	      c.close();
+	    } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      System.exit(0);
+	    }
+		
+	    switch(names.size()){
+	    case 0:
+	    	du1 = du2 = du3 = du4 = "";
+	    	break;
+	    case 1:
+	    	du1 = names.get(0);
+	    	du2 = du3 = du4 = "";
+	    	break;
+	    case 2:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = du4 = "";
+			break;
+	    case 3:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = names.get(2);
+			du4 = "";
+			break;
+	    default:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = names.get(2);
+			du4 = names.get(3);
+			break;
+	    }
+		
 	}
 
 	public void mousePressed(int button  , int x, int y){
