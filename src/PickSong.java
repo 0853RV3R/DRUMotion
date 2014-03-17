@@ -84,7 +84,7 @@ public class PickSong extends BasicGameState{
 		if(  continueClick){
 			// go to pick song
 			continueClick = false;
-			sbg.enterState(1);
+			sbg.enterState(9);
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to home

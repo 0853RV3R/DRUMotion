@@ -47,23 +47,23 @@ public class NewUser extends BasicGameState {
 		userName = "";
 		
 		//font shit
-		try {
-			
-			UIFont1 = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
-					org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/Fonts/COPPERPLATE_BECKER_MED_0.TTF"));
-	
-			uniFont = new org.newdawn.slick.UnicodeFont(UIFont1);
-			uniFont.addAsciiGlyphs();
-			org.newdawn.slick.font.effects.ColorEffect a = new org.newdawn.slick.font.effects.ColorEffect();
-			uniFont.getEffects().add(a);
-			
-			a.setColor(java.awt.Color.BLUE);
-			uniFont.loadGlyphs();
-			
-		
-		} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//
+//			UIFont1 = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
+//					org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/Fonts/COPPERPLATE_BECKER_MED_0.TTF"));
+//
+//			uniFont = new org.newdawn.slick.UnicodeFont(UIFont1);
+//			uniFont.addAsciiGlyphs();
+//			org.newdawn.slick.font.effects.ColorEffect a = new org.newdawn.slick.font.effects.ColorEffect();
+//			uniFont.getEffects().add(a);
+//
+//			a.setColor(java.awt.Color.BLUE);
+//			uniFont.loadGlyphs();
+//
+//
+//		} catch (FontFormatException | IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -84,7 +84,8 @@ public class NewUser extends BasicGameState {
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
-		g.setFont(uniFont);
+	//	g.setFont(uniFont);
+		g.setColor(Color.blue);
 		g.drawString( userName, 200, 345);
 	}
 
@@ -97,7 +98,7 @@ public class NewUser extends BasicGameState {
 		
 		if(  (input.isKeyPressed(Input.KEY_ENTER) || continueClick) && userName.length() != 0){
 			// go to pick song
-			userName = "";
+			
 			continueClick = false;
 			sbg.enterState(6);
 			

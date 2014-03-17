@@ -36,7 +36,9 @@ public class GamePlay extends BasicGameState{
 	GameGenerator2 myGameGen;
 	Thread myThread;
 	private int currentDrum = 0;
-	Color backgroundColor;
+	Color backgroundColor, fadeColor;
+	double fadeTime;
+	private boolean alert = false;
 	
 	Font font;
 	int score;
@@ -63,8 +65,7 @@ public class GamePlay extends BasicGameState{
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
-		
-		
+				
 		/*
 		 * 
 		 * SLOW EVERYTHING DOWN BY 80 MILLIS TO MAKE ANIMATIONS SMOOTHER
@@ -204,6 +205,9 @@ public class GamePlay extends BasicGameState{
 		initTri();
 		initCircle();
 		
+		fadeColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+		
+		
 		/*
 		 * Initialize Thread
 		 */
@@ -339,11 +343,12 @@ public class GamePlay extends BasicGameState{
 		 Else if Game state is correct and myThread IS started, then do nothing
 		*/
 		
-		if (sbg.getCurrentStateID() == 1 && !myThread.isAlive()){ 
+		if (sbg.getCurrentStateID() == 1 && !myThread.isAlive() && !alert){ 
 			System.out.println("***Starting Thread in GamePlay***");
 			
 			myThread.start(); // start thread
 			song2.play();
+			
 			}
 		else if (sbg.getCurrentStateID() == 1 && myThread.isAlive()){
 			// nothing to do here
@@ -364,6 +369,9 @@ public class GamePlay extends BasicGameState{
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					// first stop thread
+					alert = true;
+					song2.pause();
+					
 					myGameGen.setStopFlag(true);
 					try {
 						myThread.join();
