@@ -14,7 +14,6 @@ public class Instructions extends BasicGameState{
 	private Image Background;
 	private boolean continueClick, backClick = false;
 	
-	
 	public Instructions() {
 		super();
 	}
@@ -50,7 +49,6 @@ public class Instructions extends BasicGameState{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
-		
 	}
 
 	
