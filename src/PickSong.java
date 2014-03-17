@@ -75,6 +75,18 @@ public class PickSong extends BasicGameState{
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
 	}
 
+	public int getSong(){
+		if (song1Click){
+			return 1;
+		}else if(song2Click){
+			return 2;
+		}else if(song3Click){
+			return 3;
+		}else if(song4Click){
+			return 4;
+		}else 
+			return 0;
+	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)
 			throws SlickException {

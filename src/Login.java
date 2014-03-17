@@ -135,7 +135,7 @@ public class Login  extends BasicGameState{
 			upClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (650<= x && x <= 700 && 436 <= y && y <= 490){
+		if  (650<= x && x <= 700 && 426 <= y && y <= 480){
 			downClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
@@ -154,7 +154,8 @@ public class Login  extends BasicGameState{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
-		
+		g.drawImage(scrollUp, 650, 260, 700, 315, 0, 0, 1087, 1043);
+		g.drawImage(scrollDown, 650, 426, 700, 480, 0, 0, 1087, 1043);
 		//draw user names
 		g.setColor(Color.blue);
 		g.drawString(du1, 190, 280);
@@ -164,16 +165,16 @@ public class Login  extends BasicGameState{
 		
 		//draw scroll highlight
 		
-		if ( highlight ==1 || user ==1 ){
+		if ( highlight ==1  ){
 			g.drawImage(select, 175, 260, 635, 315,0,0,62,781);
 		}
-		if ( highlight ==2 || user ==2){
+		if ( highlight ==2 ){
 			g.drawImage(select, 175, 316, 635, 370,0,0,62,781);
 		}
-		if ( highlight ==3 || user ==3){
+		if ( highlight ==3 ){
 			g.drawImage(select, 175, 365, 635,  425,0,0,62,781);
 		}
-		if ( highlight ==4 || user ==4){
+		if ( highlight ==4 ){
 			g.drawImage(select, 175, 420, 635, 475,0,0,62,781 );
 		}
 	}
