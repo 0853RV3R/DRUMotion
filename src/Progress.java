@@ -49,6 +49,10 @@ public class Progress  extends BasicGameState{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1360,770);
+		
+		//write stats
+		g.setColor(Color.cyan);
+		g.drawString("GAMESPLAYED", 190, 280);
 	}
 
 	
