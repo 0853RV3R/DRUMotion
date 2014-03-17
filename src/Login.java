@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Login  extends BasicGameState{
 	
 	private Image Background, select, scrollUp, scrollDown;
-	private boolean continueClick = false;
+	private boolean continueClick, refresh = false;
 	private boolean backClick, user1Click, user2Click, user3Click, user4Click, upClick, downClick = false;
 	String User_1, User_2, User_3, User_4, User_5, User_6, du1, du2, du3, du4;
 
@@ -139,6 +139,10 @@ public class Login  extends BasicGameState{
 			downClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
+		if  (660<= x && x <= 700 && 345 <= y && y <= 385){
+			refresh = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
 	}
 	
 	public int getUser(){
@@ -181,7 +185,9 @@ public class Login  extends BasicGameState{
 		Input input = gc.getInput();
 		//scroll feature **** have to change this with database
 		
-
+		if (refresh) 
+			refresh = false;
+		
 			if (sbg.getCurrentStateID() == 3){
 				//Get users from Database
 				Connection c = null;
@@ -221,7 +227,7 @@ public class Login  extends BasicGameState{
 			else
 				du4 = "";
 			upClick = false;
-			highlight += 1;
+			
 		}
 
 		
@@ -235,7 +241,7 @@ public class Login  extends BasicGameState{
 			int index = names.indexOf(du1);
 			du1 = names.get(index-1);
 			downClick = false;
-			highlight -= 1;
+			
 		}
 		
 		
