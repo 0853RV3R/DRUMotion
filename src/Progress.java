@@ -12,7 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Progress  extends BasicGameState{
 	
 	private Image Background;
-	private boolean backClick = false;
+	private boolean backClick, editClick = false;
 	int gamesPlayed, percentage, hits, misses;
 	
 	public Progress() {
@@ -38,13 +38,17 @@ public class Progress  extends BasicGameState{
 			backClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
+		if  (630 <= x && x <= 780 && 493 <= y && y <= 590){
+			editClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException {
 		
 		//Draw Background
-		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
+		g.drawImage(Background, 0,0 ,800, 600,0,0,1360,770);
 	}
 
 	
@@ -57,6 +61,11 @@ public class Progress  extends BasicGameState{
 			// go to home
 			backClick = false;
 			sbg.enterState(6);
+		}
+		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
+			// go to home
+			editClick = false;
+			sbg.enterState(10);
 		}
 	}
 
