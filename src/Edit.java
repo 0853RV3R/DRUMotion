@@ -23,7 +23,7 @@ public class Edit extends BasicGameState{
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-	//	Background = new Image("res/Screens/Edit Details.png");	
+		Background = new Image("res/Screens/Edit Details.png");	
 		select = new Image("res/Buttons/select.png");
 		highlight = 1;
 	}
@@ -70,7 +70,7 @@ public class Edit extends BasicGameState{
 			throws SlickException {
 		
 		//Draw Background
-//		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
+		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
 		
 		if ( highlight ==1  ){
 			g.drawImage(select, 175, 260, 635, 315,0,0,62,781);

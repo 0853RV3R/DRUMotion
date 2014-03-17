@@ -62,7 +62,7 @@ public class Progress  extends BasicGameState{
 			backClick = false;
 			sbg.enterState(6);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
+		if( input.isKeyPressed(Input.KEY_BACK) || editClick){
 			// go to home
 			editClick = false;
 			sbg.enterState(10);
