@@ -58,7 +58,7 @@ public class Progress  extends BasicGameState{
 		//write stats
 		g.setColor(Color.darkGray);
 		g.drawString(""+gamesPlayed+"", 546, 299);
-		g.drawString(""+percentage+"", 546, 343);
+		g.drawString(""+percentage+"%", 546, 343);
 		g.drawString(""+hits+"", 546, 390);
 		g.drawString(""+misses+"", 546, 434);
 	}
