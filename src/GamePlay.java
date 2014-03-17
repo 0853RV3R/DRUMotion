@@ -93,7 +93,7 @@ public class GamePlay extends BasicGameState{
 					float timerPercent = (float) timer / timerLast;
 				      int alphaPercent = (int) (255 * timerPercent);
 				      g.setColor(new Color(255, 255, 255, alphaPercent));
-				      g.drawString("test", 20, 30);
+				      g.drawString("test", 0, 0);
 
 				}
 				else if (isSquareSignaled){ // signal on
@@ -468,6 +468,19 @@ public class GamePlay extends BasicGameState{
 				drumSound1.playAt(-1,0,0);
 				score += 5;
 				isSquareHit = true;// animation on
+				//code for score fade in and out
+				
+			         timer += t;
+			         if (timer > timerLast) {
+			            fade = !fade;
+			         }
+			      } else {
+			         timer -= t;
+			         if (timer < 0) {
+			            fade = !fade;
+			         }
+			      
+				
 			}
 			if(!isSquareSignaled){
 				score -= 5;

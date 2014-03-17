@@ -9,21 +9,21 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-public class PickSong extends BasicGameState{
+public class Edit extends BasicGameState{
 	
 	private Image Background, select;
 	private boolean continueClick = false;
 	private boolean backClick, song1Click, song2Click, song3Click, song4Click, upClick, downClick = false;
 	private int highlight;
 	
-	public PickSong() {
+	public Edit() {
 		super();
 	}
 
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Pick a Song.png");	
+		Background = new Image("res/Screens/Edit Details.png");	
 		select = new Image("res/Buttons/select.png");
 		highlight = 1;
 	}
@@ -124,7 +124,7 @@ public class PickSong extends BasicGameState{
 
 	
 	public int getID() {
-		return 5;
+		return 10;
 	}
 
 }

@@ -55,5 +55,6 @@ public class Main extends StateBasedGame {
 		this.addState(new PickSong());
 		this.addState(new Progress());
 		this.addState(new Instructions());
+		this.addState(new Edit());
 	}
 }
