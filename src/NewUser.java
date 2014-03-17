@@ -1,4 +1,7 @@
 
+import java.awt.FontFormatException;
+import java.io.IOException;
+
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -7,6 +10,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,7 +23,9 @@ public class NewUser extends BasicGameState {
 	private int keyCode;
 	String userName;
 	MyInputListener listener = new MyInputListener();
-
+	java.awt.Font UIFont1;
+    org.newdawn.slick.UnicodeFont uniFont;
+    
 
     
 	public NewUser() {
@@ -31,7 +37,25 @@ public class NewUser extends BasicGameState {
 			throws SlickException {
 		Background = new Image("res/Screens/Enter Name.png");
 		userName = "";
-
+		
+		//font shit
+		try {
+			
+			UIFont1 = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT,
+					org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/Fonts/COPPERPLATE_BECKER_MED_0.TTF"));
+	
+			uniFont = new org.newdawn.slick.UnicodeFont(UIFont1);
+			uniFont.addAsciiGlyphs();
+			org.newdawn.slick.font.effects.ColorEffect a = new org.newdawn.slick.font.effects.ColorEffect();
+			uniFont.getEffects().add(a);
+			
+			a.setColor(java.awt.Color.BLUE);
+			uniFont.loadGlyphs();
+			
+		
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -52,7 +76,7 @@ public class NewUser extends BasicGameState {
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
-		g.setColor(Color.blue);
+		g.setFont(uniFont);
 		g.drawString( userName, 200, 345);
 	}
 
@@ -65,11 +89,13 @@ public class NewUser extends BasicGameState {
 		
 		if(  (input.isKeyPressed(Input.KEY_ENTER) || continueClick) && userName.length() != 0){
 			// go to pick song
+			userName = "";
 			continueClick = false;
 			sbg.enterState(6);
 		}
 		if( backClick){
 			// go to home
+			userName = "";
 			backClick = false;
 			sbg.enterState(0);
 		}

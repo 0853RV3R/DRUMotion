@@ -13,7 +13,7 @@ public class PickSong extends BasicGameState{
 	
 	private Image Background;
 	private boolean continueClick = false;
-	private boolean backClick, song1Click, song2Click, song3Click, song4Click = false;
+	private boolean backClick, song1Click, song2Click, song3Click, song4Click, upClick, downClick = false;
 	
 	public PickSong() {
 		super();
@@ -31,10 +31,10 @@ public class PickSong extends BasicGameState{
 		
 		System.out.println( "x = " + x + "  y = " +y);
 		
-		//See if they click continue or back
+		//See where the user clicked
 		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
 			continueClick = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "x = " + x + "  y = " +y );
 		}
 		if  (10 <= x && x <= 180 && 450 <= y && y <= 580){
 			backClick = true;
@@ -42,20 +42,30 @@ public class PickSong extends BasicGameState{
 		}
 		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
 			song1Click = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 1");
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
 			song2Click = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 2");
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
 			song3Click = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 3");
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
 			song4Click = true;
-			System.out.println( "x = " + x + "  y = " +y);
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 4");
 		}
+		
+		// add this if we add more songs and need to scroll
+//		if  (650 <= x && x <= 700 && 260 <= y && y <= 315){
+//			upClick = true;
+//			System.out.println( "x = " + x + "  y = " +y);
+//		}
+//		if  (650<= x && x <= 700 && 436 <= y && y <= 490){
+//			downClick = true;
+//			System.out.println( "x = " + x + "  y = " +y);
+//		}
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)

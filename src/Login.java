@@ -13,7 +13,8 @@ public class Login  extends BasicGameState{
 	
 	private Image Background;
 	private boolean continueClick = false;
-	private boolean backClick, user1Click, user2Click, user3Click, user4Click = false;
+	private boolean backClick, user1Click, user2Click, user3Click, user4Click, upClick, downClick = false;
+	String User_1, User_2, User_3, User_4, User_5, User_6, du1, du2, du3, du4;
 	
 	
 	public Login() {
@@ -23,7 +24,17 @@ public class Login  extends BasicGameState{
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Pick a Name.png");		
+		Background = new Image("res/Screens/Pick a Name.png");	
+		User_1 = "User 1";
+		User_2 = "User 2";
+		User_3 = "User 3";
+		User_4 = "User 4";
+		User_5 = "User 5";
+		User_6 = "User 6";
+		du1 = User_1;
+		du2 = User_2;
+		du3 = User_3;
+		du4 = User_4;
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -33,7 +44,7 @@ public class Login  extends BasicGameState{
 		System.out.println( "x = " + x + "  y = " +y);
 
 		
-		//See if they click continue or back
+		//Check which user they select
 		if  (325 <= x && x <= 495 && 485 <= y && y <= 540){
 			continueClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
@@ -46,16 +57,24 @@ public class Login  extends BasicGameState{
 			user1Click = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
 			user2Click = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
 			user3Click = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
-		if  (320 <= x && x <= 490 && 485 <= y && y <= 535){
+		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
 			user4Click = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (650 <= x && x <= 700 && 260 <= y && y <= 315){
+			upClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (650<= x && x <= 700 && 436 <= y && y <= 490){
+			downClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 	}
@@ -65,11 +84,34 @@ public class Login  extends BasicGameState{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
+		
+		//draw user names
+		g.setColor(Color.blue);
+		g.drawString(du1, 190, 280);
+		g.drawString(du2, 190, 330);
+		g.drawString(du3, 190, 385);
+		g.drawString(du4, 190, 450);
 	}
 
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2)
 			throws SlickException {
+		
+		//scroll feature **** have to change this with database
+		if (upClick){
+			du1 = du2;
+			du2 = du3;
+			du3 = du4;
+			du4 = User_5;
+			upClick = false;
+		}
+		if (downClick){
+			du4 = du3;
+			du3 = du2;
+			du2 = du1;
+			du1 = User_6;
+			downClick = false;
+		}
 		
 		Input input = gc.getInput();
 		

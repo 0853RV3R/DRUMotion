@@ -12,7 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Home  extends BasicGameState{
 	
 	private Image Background;
-	private boolean newUserClick = false;
+	private boolean newUserClick, exitClick = false;
 	private boolean loginClick = false;
 	
 	public Home() {
@@ -40,6 +40,10 @@ public class Home  extends BasicGameState{
 			loginClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
+		if  (10 <= x && x <= 180 && 490 <= y && y <= 590){
+			exitClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
@@ -60,10 +64,14 @@ public class Home  extends BasicGameState{
 			newUserClick = false;
 			sbg.enterState(2);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || loginClick){
+		if( loginClick){
 			// go to home
 			loginClick = false;
 			sbg.enterState(3);
+		}
+		if( exitClick){
+			// quit game
+			gc.exit();
 		}
 	}
 
