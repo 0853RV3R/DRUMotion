@@ -87,7 +87,6 @@ public class Progress  extends BasicGameState{
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			//TODO change username
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM users WHERE name = \"Riccardo Caimano\";" );
 			while ( rs.next() ) {
 				gamesPlayed = rs.getInt("gamesPlayed");
