@@ -130,12 +130,7 @@ public class Statistics  extends GameStateBase<GameData,States>{
 	}
 
 
-	@Override
-	public void mousePressed(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 
 	@Override
 	public void mouseReleased(int arg0, int arg1, int arg2) {
