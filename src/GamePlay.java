@@ -44,6 +44,7 @@ public class GamePlay extends BasicGameState{
 	
 	Font font;
 	int score;
+	int hits, misses;
 	Sound drumSound1, drumSound2, drumSound3, drumSound4;
 	Music song1, song2, song3, song4;
 	
@@ -88,6 +89,7 @@ public class GamePlay extends BasicGameState{
 					squareHit.draw(50, 400, 150, 150);
 					squareHit.stopAt(1);
 					isSquareHit = false;
+					hits++;
 					
 					// code for score fade in and out
 					float timerPercent = (float) timer / timerLast;
@@ -106,7 +108,7 @@ public class GamePlay extends BasicGameState{
 					squareError.draw(50, 400, 150, 150);
 					squareError.stopAt(1);
 					isSquareError = false;
-					
+					misses++;
 				}
 				else if (!isSquareSignaled){  // empty (no signal)
 					square.draw(50, 400, 150, 150);
@@ -122,6 +124,7 @@ public class GamePlay extends BasicGameState{
 			pentaHit.draw(200, 200, 150, 150);
 			pentaHit.stopAt(1);
 			isPentaHit = false;
+			hits++;
 		}
 		else if (isPentaSignaled){ // signal on
 			
@@ -133,6 +136,7 @@ public class GamePlay extends BasicGameState{
 			pentaError.draw(200, 200, 150, 150);
 			pentaError.stopAt(1);
 			isPentaError = false;
+			misses++;
 		}
 		else if (!isPentaSignaled){  // empty (no signal)
 			penta.draw(200, 200, 150, 150);
@@ -144,6 +148,7 @@ public class GamePlay extends BasicGameState{
 					triHit.draw(400, 300, 150, 150);
 					triHit.stopAt(1);
 					isTriHit = false;
+					hits++;
 				}
 				else if (isTriSignaled){ // signal on
 					
@@ -155,6 +160,7 @@ public class GamePlay extends BasicGameState{
 					triError.draw(400, 300, 150, 150);
 					triError.stopAt(1);
 					isTriError = false;
+					misses++;
 				}
 				else if (!isTriSignaled){  // empty (no signal)
 					tri.draw(400, 300, 150, 150);
@@ -166,6 +172,7 @@ public class GamePlay extends BasicGameState{
 					circleHit.draw(600, 400, 150, 150);
 					circleHit.stopAt(1);
 					isCircleHit = false;
+					hits++;
 				}
 				else if (isCircleSignaled){ // signal on
 					
@@ -177,6 +184,7 @@ public class GamePlay extends BasicGameState{
 					circleError.draw(600, 400, 150, 150);
 					circleError.stopAt(1);
 					isCircleError = false;
+					misses++;
 				}
 				else if (!isCircleSignaled){  // empty (no signal)
 					circle.draw(600, 400, 150, 150);
@@ -208,6 +216,8 @@ public class GamePlay extends BasicGameState{
 		circle = new Image("res/Drums/circle empty.png");
 		// set initial score to zero
 		score = 0;
+		hits = 0;
+		misses = 0;
 		initSquare();
 		initPenta();
 		initTri();
