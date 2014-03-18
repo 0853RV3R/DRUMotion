@@ -259,7 +259,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isSquareSignaled = false;
 		// square Empty --> Unpressed (signal)
 			Image [] squareSignalImages = { new Image("res/Drums/square empty.png"), new Image("res/Drums/square unpressed.png")};
-			int [] squareSignalDurations = {200, 50000};
+			int [] squareSignalDurations = {200, 900000};
 			squareSignal = new Animation(squareSignalImages, squareSignalDurations, false);
 			
 			
@@ -279,7 +279,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isPentaSignaled = false;
 			// pentagon Empty --> Unpressed (signal)
 				Image [] pentaSignalImages = { new Image("res/Drums/pentagon empty.png"), new Image("res/Drums/pentagon unpressed.png")};
-				int [] pentaSignalDurations = {200, 50000};
+				int [] pentaSignalDurations = {200, 900000};
 				pentaSignal = new Animation(pentaSignalImages, pentaSignalDurations, false);
 				
 				
@@ -299,7 +299,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isTriSignaled = false;
 		// triangle Empty --> Unpressed (signal)
 			Image [] triSignalImages = { new Image("res/Drums/triangle empty.png"), new Image("res/Drums/triangle unpressed.png")};
-			int [] triSignalDurations = {200, 50000};
+			int [] triSignalDurations = {200, 900000};
 			triSignal = new Animation(triSignalImages, triSignalDurations, false);
 			
 			
@@ -319,7 +319,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isCircleSignaled = false;
 		// circle Empty --> Unpressed (signal)
 			Image [] circleSignalImages = { new Image("res/Drums/circle empty.png"), new Image("res/Drums/circle unpressed.png")};
-			int [] circleSignalDurations = {200, 50000};
+			int [] circleSignalDurations = {200, 900000};
 			circleSignal = new Animation(circleSignalImages, circleSignalDurations, false);
 			
 			
