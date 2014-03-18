@@ -16,7 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import java.sql.*;
 
 
-public class NewUser extends BasicGameState {
+public class NewUser extends GameStateBase<GameData,States> {
 	
 	private Image Background;
 	private boolean continueClick = false;
@@ -36,8 +36,8 @@ public class NewUser extends BasicGameState {
 
 
     
-	public NewUser() {
-		super();
+	public NewUser(ClientBase<GameData> theClient, States theState) {
+		super(theClient, theState);
 	}
 
 	
@@ -151,6 +151,148 @@ public class NewUser extends BasicGameState {
 	
 	public int getID() {
 		return 2;
+	}
+
+
+	@Override
+	public void enter(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void leave(GameContainer arg0, StateBasedGame arg1)
+			throws SlickException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseDragged(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseMoved(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(int arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseWheelMoved(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void inputEnded() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void inputStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setInput(Input arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerButtonPressed(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerButtonReleased(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerDownPressed(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerDownReleased(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerLeftPressed(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerLeftReleased(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerRightPressed(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerRightReleased(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerUpPressed(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void controllerUpReleased(int arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
