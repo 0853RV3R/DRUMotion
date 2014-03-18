@@ -56,6 +56,7 @@ public class Main extends ClientBase<GameData> {
 		addState(new PickSong(this, States.PICK_SONG));
 		addState(new Progress(this, States.PROGRESS));
 		addState(new Instructions(this, States.INSTRUCTIONS));
+		addState(new Edit(this, States.EDIT));
 /*
 		this.addState(new Home());
 		this.addState(new GamePlay());

@@ -87,8 +87,7 @@ public class Progress  extends GameStateBase<GameData,States>{
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			//TODO change username
-			ResultSet rs = stmt.executeQuery( "SELECT * FROM users WHERE name = \"Riccardo Caimano\";" );
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM users WHERE name = \""+getClient().getGameData().getUserName()+"\";" );
 			while ( rs.next() ) {
 				gamesPlayed = rs.getInt("gamesPlayed");
 				percentage = rs.getInt("percentage");

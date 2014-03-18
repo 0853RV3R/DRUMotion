@@ -17,9 +17,11 @@ public class Login  extends GameStateBase<GameData,States>{
 	private boolean continueClick, refresh = false;
 	private boolean backClick, user1Click, user2Click, user3Click, user4Click, upClick, downClick = false;
 	String User_1, User_2, User_3, User_4, User_5, User_6, du1, du2, du3, du4;
+	ClientBase<GameData> client;
 
 	private int highlight;
 	int user;
+	int count = 0;
 
 	ArrayList<String> names = new ArrayList<String>();
 
@@ -27,6 +29,7 @@ public class Login  extends GameStateBase<GameData,States>{
 	
 	public Login(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
+		client = theClient;
 	}
 
 	
@@ -40,55 +43,7 @@ public class Login  extends GameStateBase<GameData,States>{
 		highlight = 1;
 
 		//Get users from Database
-		Connection c = null;
-	    Statement stmt = null;
-	    
-	    try {
-	      Class.forName("org.sqlite.JDBC");
-	      c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
-	      c.setAutoCommit(false);
-
-	      stmt = c.createStatement();
-	      ResultSet rs = stmt.executeQuery( "SELECT * FROM users;" );
-	      while ( rs.next() ) {
-	         String  name = rs.getString("name");
-	         names.add(name);
-	      }
-	      rs.close();
-	      stmt.close();
-	      c.close();
-	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
-	    }
-		
-	    switch(names.size()){
-		    case 0:
-		    	du1 = du2 = du3 = du4 = "";
-		    	break;
-		    case 1:
-		    	du1 = names.get(0);
-		    	du2 = du3 = du4 = "";
-		    	break;
-		    case 2:
-		    	du1 = names.get(0);
-				du2 = names.get(1);
-				du3 = du4 = "";
-				break;
-		    case 3:
-		    	du1 = names.get(0);
-				du2 = names.get(1);
-				du3 = names.get(2);
-				du4 = "";
-				break;
-		    default:
-		    	du1 = names.get(0);
-				du2 = names.get(1);
-				du3 = names.get(2);
-				du4 = names.get(3);
-				break;
-	    }
-		
+				
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -185,60 +140,14 @@ public class Login  extends GameStateBase<GameData,States>{
 
 		Input input = gc.getInput();
 		//scroll feature **** have to change this with database
-		
+		if (count == 0){
+			updateDatabase();
+			count++;
+		}
 		if (refresh){ 
 			refresh = false;
-				//Get users from Database
-				Connection c = null;
-				Statement stmt = null;
-
-				try {
-					Class.forName("org.sqlite.JDBC");
-					c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
-					c.setAutoCommit(false);
-
-					stmt = c.createStatement();
-					ResultSet rs = stmt.executeQuery( "SELECT * FROM users;" );
-					while ( rs.next() ) {
-						String  name = rs.getString("name");
-						if(!names.contains(name))
-							names.add(name);
-					}
-					rs.close();
-					stmt.close();
-					c.close();
-				} catch ( Exception e ) {
-					System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-					System.exit(0);
-				}
-				
-				switch(names.size()){
-			    case 0:
-			    	du1 = du2 = du3 = du4 = "";
-			    	break;
-			    case 1:
-			    	du1 = names.get(0);
-			    	du2 = du3 = du4 = "";
-			    	break;
-			    case 2:
-			    	du1 = names.get(0);
-					du2 = names.get(1);
-					du3 = du4 = "";
-					break;
-			    case 3:
-			    	du1 = names.get(0);
-					du2 = names.get(1);
-					du3 = names.get(2);
-					du4 = "";
-					break;
-			    default:
-			    	du1 = names.get(0);
-					du2 = names.get(1);
-					du3 = names.get(2);
-					du4 = names.get(3);
-					break;
-		    }
-				downClick = true;
+			updateDatabase();
+			downClick = true;
 		}
 		
 		if (downClick && !(du4.equals(names.get(names.size()-1)) ||du4.equals(""))){
@@ -272,13 +181,85 @@ public class Login  extends GameStateBase<GameData,States>{
 		if(  continueClick){
 			// go to pick song
 			continueClick = false;
+			
+			if ( highlight ==1  ){
+				getClient().getGameData().setUserName(du1);
+				System.out.println("User: "+getClient().getGameData().getUserName());
+			}
+			if ( highlight ==2 ){
+				getClient().getGameData().setUserName(du2);
+				System.out.println("User: "+getClient().getGameData().getUserName());
+			}
+			if ( highlight ==3 ){
+				getClient().getGameData().setUserName(du3);
+				System.out.println("User: "+getClient().getGameData().getUserName());
+			}
+			if ( highlight ==4 ){
+				getClient().getGameData().setUserName(du4);
+				System.out.println("User: "+getClient().getGameData().getUserName());
+			}
+			count = 0;
 			sbg.enterState(6);
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to home
 			backClick = false;
+			count = 0;
 			sbg.enterState(0);
 		}
+	}
+	
+	public void updateDatabase(){
+		//Get users from Database
+		Connection c = null;
+		Statement stmt = null;
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM users;" );
+			while ( rs.next() ) {
+				String  name = rs.getString("name");
+				if(!names.contains(name))
+					names.add(name);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+		
+		switch(names.size()){
+	    case 0:
+	    	du1 = du2 = du3 = du4 = "";
+	    	break;
+	    case 1:
+	    	du1 = names.get(0);
+	    	du2 = du3 = du4 = "";
+	    	break;
+	    case 2:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = du4 = "";
+			break;
+	    case 3:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = names.get(2);
+			du4 = "";
+			break;
+	    default:
+	    	du1 = names.get(0);
+			du2 = names.get(1);
+			du3 = names.get(2);
+			du4 = names.get(3);
+			break;
+    }
 	}
 
 	
