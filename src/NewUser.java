@@ -132,9 +132,6 @@ public class NewUser extends BasicGameState {
 	}
 	public void keyPressed(int code, char letter) {
 		
-		// Riccardo, here is where we get the user name but this is being updated. we might have to make it so you only
-		// store the name once they hit continue meaning they are done writing the name
-		
 			if (code == 14 && userName.length() != 0){
 				userName = userName.substring(0, userName.length()-1);
 			}else{
@@ -145,6 +142,10 @@ public class NewUser extends BasicGameState {
 
 	public void keyReleased(int arg0, char arg1) {
 		
+	}
+	
+	public String getUser(){
+		return userName;
 	}
 
 
