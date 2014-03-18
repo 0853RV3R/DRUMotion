@@ -14,9 +14,11 @@ public class Instructions extends GameStateBase<GameData,States>{
 	private Image Background;
 	private boolean continueClick, backClick = false;
 	
+
 	
 	public Instructions(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
+
 	}
 
 	
@@ -50,7 +52,6 @@ public class Instructions extends GameStateBase<GameData,States>{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
-		
 	}
 
 	

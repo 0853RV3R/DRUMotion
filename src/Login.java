@@ -241,8 +241,7 @@ public class Login  extends GameStateBase<GameData,States>{
 				downClick = true;
 		}
 		
-		//scroll feature **** have to change this with database
-		if (downClick && !du4.equals(names.get(names.size()-1))){
+		if (downClick && !(du4.equals(names.get(names.size()-1)) ||du4.equals(""))){
 
 			du1 = du2;
 			du2 = du3;
@@ -256,9 +255,6 @@ public class Login  extends GameStateBase<GameData,States>{
 			upClick = false;
 			
 		}
-
-		
-
 		if (upClick && !du1.equals(names.get(0))){
 
 			du4 = du3;

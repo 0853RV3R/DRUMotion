@@ -46,6 +46,7 @@ public class Main extends ClientBase<GameData> {
 	
 	public void initStatesList(GameContainer gc) throws SlickException{
 		// this ordering determines the startup state
+
 		addState(new Home());
 		addState(new GamePlay(this, States.GAMEPLAY));
 		addState(new NewUser(this, States.NEW_USER));
@@ -55,5 +56,17 @@ public class Main extends ClientBase<GameData> {
 		addState(new PickSong(this, States.PICK_SONG));
 		addState(new Progress(this, States.PROGRESS));
 		addState(new Instructions(this, States.INSTRUCTIONS));
+/*
+		this.addState(new Home());
+		this.addState(new GamePlay());
+		this.addState(new NewUser());
+		this.addState(new UserScreen());
+		this.addState(new Login());
+		this.addState(new Statistics());
+		this.addState(new PickSong());
+		this.addState(new Progress());
+		this.addState(new Instructions());
+		this.addState(new Edit());
+*/
 	}
 }

@@ -11,9 +11,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class PickSong extends GameStateBase<GameData,States>{
 	
-	private Image Background;
+	private Image Background, select;
 	private boolean continueClick = false;
 	private boolean backClick, song1Click, song2Click, song3Click, song4Click, upClick, downClick = false;
+	private int highlight;
 	
 	public PickSong(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
@@ -22,7 +23,9 @@ public class PickSong extends GameStateBase<GameData,States>{
 	
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		Background = new Image("res/Screens/Pick a Song.png");		
+		Background = new Image("res/Screens/Pick a Song.png");	
+		select = new Image("res/Buttons/select.png");
+		highlight = 1;
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -42,30 +45,25 @@ public class PickSong extends GameStateBase<GameData,States>{
 		}
 		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
 			song1Click = true;
+			highlight = 1;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 1");
 		}
 		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
 			song2Click = true;
+			highlight = 2;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 2");
 		}
 		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
 			song3Click = true;
+			highlight = 3;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 3");
 		}
 		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
 			song4Click = true;
+			highlight = 4;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 4");
 		}
 		
-		// add this if we add more songs and need to scroll
-//		if  (650 <= x && x <= 700 && 260 <= y && y <= 315){
-//			upClick = true;
-//			System.out.println( "x = " + x + "  y = " +y);
-//		}
-//		if  (650<= x && x <= 700 && 436 <= y && y <= 490){
-//			downClick = true;
-//			System.out.println( "x = " + x + "  y = " +y);
-//		}
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
@@ -73,6 +71,19 @@ public class PickSong extends GameStateBase<GameData,States>{
 		
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
+		
+		if ( highlight ==1  ){
+			g.drawImage(select, 175, 260, 635, 315,0,0,62,781);
+		}
+		if ( highlight ==2 ){
+			g.drawImage(select, 175, 316, 635, 370,0,0,62,781);
+		}
+		if ( highlight ==3 ){
+			g.drawImage(select, 175, 365, 635,  425,0,0,62,781);
+		}
+		if ( highlight ==4 ){
+			g.drawImage(select, 175, 420, 635, 475,0,0,62,781 );
+		}
 	}
 
 	public int getSong(){

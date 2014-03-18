@@ -14,7 +14,7 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 	
 	private Image Background;
 	private boolean pickSongClick = false;
-	private boolean progressClick, logoutClick = false;
+	private boolean progressClick, logoutClick, editClick = false;
 	
 	public UserScreen(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
@@ -45,6 +45,10 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 			logoutClick = true;
 			System.out.println( "x = " + x + "  y = " +y);
 		}
+		if  (280 <= x && x <= 530 && 430 <= y && y <= 580){
+			editClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
@@ -69,6 +73,11 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 			// go to home
 			progressClick = false;
 			sbg.enterState(7);
+		}
+		if( editClick){
+			// go to home
+			editClick = false;
+			sbg.enterState(10);
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || logoutClick){
 			// go to home
