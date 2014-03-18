@@ -252,7 +252,7 @@ public class Login  extends GameStateBase<GameData,States>{
 				du4 = names.get(index+1);
 			else
 				du4 = "";
-			upClick = false;
+			downClick = false;
 			
 		}
 		if (upClick && !du1.equals(names.get(0))){
@@ -263,7 +263,7 @@ public class Login  extends GameStateBase<GameData,States>{
 			
 			int index = names.indexOf(du1);
 			du1 = names.get(index-1);
-			downClick = false;
+			upClick = false;
 			
 		}
 		
