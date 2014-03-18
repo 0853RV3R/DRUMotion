@@ -16,12 +16,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Main extends StateBasedGame {
+public class Main extends ClientBase<GameData> {
 	
 	
 
 	public Main(String name) {
-		super(name);
+		super(name, new GameData());
 		// TODO Auto-generated constructor stub
 	}
 
@@ -46,6 +46,17 @@ public class Main extends StateBasedGame {
 	
 	public void initStatesList(GameContainer gc) throws SlickException{
 		// this ordering determines the startup state
+
+		addState(new Home());
+		addState(new GamePlay(this, States.GAMEPLAY));
+		addState(new NewUser(this, States.NEW_USER));
+		addState(new UserScreen(this, States.USER_SCREEN));
+		addState(new Login(this, States.LOGIN));
+		addState(new Statistics(this, States.STATISTICS));
+		addState(new PickSong(this, States.PICK_SONG));
+		addState(new Progress(this, States.PROGRESS));
+		addState(new Instructions(this, States.INSTRUCTIONS));
+/*
 		this.addState(new Home());
 		this.addState(new GamePlay());
 		this.addState(new NewUser());
@@ -56,5 +67,6 @@ public class Main extends StateBasedGame {
 		this.addState(new Progress());
 		this.addState(new Instructions());
 		this.addState(new Edit());
+*/
 	}
 }
