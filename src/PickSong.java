@@ -26,6 +26,7 @@ public class PickSong extends GameStateBase<GameData,States>{
 		Background = new Image("res/Screens/Pick a Song.png");	
 		select = new Image("res/Buttons/select.png");
 		highlight = 1;
+		song1Click = true;
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -44,26 +45,39 @@ public class PickSong extends GameStateBase<GameData,States>{
 			System.out.println( "x = " + x + "  y = " +y);
 		}
 		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
+			songsClickReset();
 			song1Click = true;
 			highlight = 1;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 1");
 		}
 		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
+			songsClickReset();
 			song2Click = true;
+			
 			highlight = 2;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 2");
 		}
+		
 		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
+			songsClickReset();
 			song3Click = true;
 			highlight = 3;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 3");
 		}
 		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
+			songsClickReset();
 			song4Click = true;
 			highlight = 4;
 			System.out.println( "x = " + x + "  y = " +y+ "/n song 4");
 		}
 		
+		
+	}
+	public void songsClickReset(){
+		song1Click = false;
+		song2Click = false;
+		song3Click = false;
+		song4Click = false;
 	}
 	
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
@@ -86,7 +100,7 @@ public class PickSong extends GameStateBase<GameData,States>{
 		}
 	}
 
-	public int getSong(){
+	public Integer getSong(){
 		if (song1Click){
 			return 1;
 		}else if(song2Click){
@@ -107,15 +121,18 @@ public class PickSong extends GameStateBase<GameData,States>{
 		if(  continueClick){
 			// go to pick song
 			continueClick = false;
+			getClient().getGameData().setSongName(getSong().toString());// set song in game data
+			System.out.print("Song Chosen: ");
+			System.out.println(getClient().getGameData().getSongName());
 			sbg.enterState(9);
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
-			// go to home
+			// go to user page
 			backClick = false;
 			sbg.enterState(6);
 		}
 		if(  song1Click || song2Click || song3Click || song4Click){
-			// go to game play
+			
 			continueClick = false;
 		//	sbg.enterState(0);
 		}

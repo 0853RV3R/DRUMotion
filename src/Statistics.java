@@ -126,16 +126,16 @@ public class Statistics  extends GameStateBase<GameData,States>{
 		
 		Input input = gc.getInput();
 		
-		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
+		if(  backClick){
 			// go to home
 			backClick = false;
 			sbg.enterState(6);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || playClick){
+		if(  playClick){
 			// go to game
 			playClick = false;
 			//TODO Change to return to game
-			sbg.enterState(6);
+			sbg.enterState(1);
 		}
 	}
 

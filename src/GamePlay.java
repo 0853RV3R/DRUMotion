@@ -335,8 +335,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	}
 	
 	public void initMusic() throws SlickException{
-		song1 =new Music("res/Music/Younevercantell.ogg");
-		song2 = new Music("res/Music/Spindizzy.ogg");
+		song2 =new Music("res/Music/Younevercantell.ogg");
+		song1 = new Music("res/Music/Spindizzy.ogg");
 	}
 	
 	public void initGameGen(){
@@ -366,7 +366,11 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		if (sbg.getCurrentStateID() == 1 && !isInitialized){ 
 			System.out.println("***Starting Thread in GamePlay***");
 			initGameGen(); // if myGameGen is null, initialize it
-			song2.play(); // play music
+			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
+			if (getClient().getGameData().getSongName().equals("1")) song1.play(); // play song 1
+			if (getClient().getGameData().getSongName().equals("2")) song2.play(); // play song 2
+			
+			
 			
 			
 			
@@ -412,16 +416,20 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					song2.pause(); // pause song
 					
-					
+					//update GameData for User
+					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
+					getClient().getGameData().setHits(getClient().getGameData().getMisses() + misses);
 					
 					// end game generator while loop
-					
 					myGameGen.kill(); //indicates target thread should stop running
-					
+					score = 0;
+					hits = 0;
+					misses = 0;
+						
 					isInitialized = false;
 					
-					// go to user page
-					sbg.enterState(6);
+					// go to stats page
+					sbg.enterState(4);
 				}
 				
 				
