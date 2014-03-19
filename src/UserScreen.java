@@ -80,7 +80,7 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 			editClick = false;
 			sbg.enterState(10);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || logoutClick){
+		if(  logoutClick){
 			// go to home
 			logoutClick = false;
 			sbg.enterState(0);
