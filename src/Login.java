@@ -199,7 +199,7 @@ public class Login  extends GameStateBase<GameData,States>{
 				System.out.println("User: "+getClient().getGameData().getUserName());
 			}
 			count = 0;
-			sbg.enterState(6);
+			sbg.enterState(6); // user's home screen
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to home
