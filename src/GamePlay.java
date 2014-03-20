@@ -46,7 +46,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	boolean fade;
 	boolean isInitialized = false;
 	long startTime, currentTime, endTime;
-	
+	boolean isTimeUp;
 	Font font;
 	int score;
 	int hits, misses;
@@ -427,10 +427,16 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		
+
 		
-		// if back is pressed go to User Screen
+		// if back is pressed go to User Screen -- dont save any stats
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					endGameToUserScreen(sbg);
+				}
+		// if game is done, go to Stats screen
+				if( isTimeUp ){
+					
+					endGameToResults(sbg);
 				}
 				
 				
@@ -560,15 +566,16 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	}
 
 	private void endGameToResults(StateBasedGame sbg) {
-		// TODO Auto-generated method stub
 		song2.pause(); // pause song
 		
-		//update+store GameData for User
-		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
-		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
+		//update GameData for User
+		getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
+		getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
+		getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
 		
 		// end game generator while loop
 		myGameGen.kill(); //indicates target thread should stop running
+		// reset game score values
 		score = 0;
 		hits = 0;
 		misses = 0;

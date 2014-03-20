@@ -35,6 +35,40 @@ public class Statistics  extends GameStateBase<GameData,States>{
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1360,770);
 		
+
+
+		
+		//write stats
+		g.setColor(Color.darkGray);
+		g.drawString(""+score+"", 536, 275);
+		g.drawString(""+percentage+"%", 536, 324);
+		g.drawString(""+hits+"", 536, 366);
+		g.drawString(""+misses+"", 536, 413);
+	}
+	
+	public void mousePressed(int button  , int x, int y){
+		
+		//test listener
+		
+		System.out.println( "x = " + x + "  y = " +y);
+
+		//See if they click continue or back
+		if  (10 <= x && x <= 180 && 450 <= y && y <= 580){
+			backClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+		if  (630 <= x && x <= 780 && 493 <= y && y <= 590){
+			playClick = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
+	}
+
+	
+	public void update(GameContainer gc, StateBasedGame sbg, int arg2)
+			throws SlickException {
+		
+		Input input = gc.getInput();
+		
 		//do updates
 		score = getClient().getGameData().getCurrentScore();
 		hits = getClient().getGameData().getHits();
@@ -93,38 +127,6 @@ public class Statistics  extends GameStateBase<GameData,States>{
 			System.exit(0);
 		}
 
-
-		
-		//write stats
-		g.setColor(Color.darkGray);
-		g.drawString(""+score+"", 536, 275);
-		g.drawString(""+percentage+"%", 536, 324);
-		g.drawString(""+hits+"", 536, 366);
-		g.drawString(""+misses+"", 536, 413);
-	}
-	
-	public void mousePressed(int button  , int x, int y){
-		
-		//test listener
-		
-		System.out.println( "x = " + x + "  y = " +y);
-
-		//See if they click continue or back
-		if  (10 <= x && x <= 180 && 450 <= y && y <= 580){
-			backClick = true;
-			System.out.println( "x = " + x + "  y = " +y);
-		}
-		if  (630 <= x && x <= 780 && 493 <= y && y <= 590){
-			playClick = true;
-			System.out.println( "x = " + x + "  y = " +y);
-		}
-	}
-
-	
-	public void update(GameContainer gc, StateBasedGame sbg, int arg2)
-			throws SlickException {
-		
-		Input input = gc.getInput();
 		
 		if(  backClick){
 			// go to home

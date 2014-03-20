@@ -25,6 +25,7 @@ public class Edit extends GameStateBase<GameData,States> {
 //	NewUser temp = new NewUser();
 	
 	
+
 	public Edit(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
 	}
