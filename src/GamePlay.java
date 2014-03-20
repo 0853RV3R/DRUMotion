@@ -411,14 +411,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		
-		
-		// if back is pressed go to HomeScreen
+		// if back is pressed go to Stats screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					song2.pause(); // pause song
 					
 					//update GameData for User
 					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-					getClient().getGameData().setHits(getClient().getGameData().getMisses() + misses);
+					getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
+					getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
 					
 					// end game generator while loop
 					myGameGen.kill(); //indicates target thread should stop running
