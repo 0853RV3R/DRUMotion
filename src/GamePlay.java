@@ -433,7 +433,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					endGameToUserScreen(sbg);
 				}
-		// if game is done, go to Stats screen
+		// if game is done (countdown timer is done), go to Stats screen
 				if( isTimeUp ){
 					
 					endGameToResults(sbg);
