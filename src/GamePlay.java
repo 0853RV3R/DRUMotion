@@ -41,7 +41,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
-	private int timer, song1Timer, song2Timer;
+	private int timer, timeLeft, song1Timer, song2Timer;
 	private int timerLast = 1500;
 	boolean fade;
 	boolean isInitialized = false;
@@ -72,7 +72,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
-		g.drawString("Time Remaining:  " +"  "+ time, 650, 135);
+		g.drawString("Time Remaining:  " +"  "+ timeLeft, 650, 135);
 				
 		/*
 		 * 
