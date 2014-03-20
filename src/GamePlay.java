@@ -1,6 +1,7 @@
 
 
 
+import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -41,10 +42,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
-	private int timer, timeLeft, song1Timer, song2Timer;
+	private int timer, song1Timer, song2Timer;
+	long timeLeft;
 	private int timerLast = 1500;
 	boolean fade;
 	boolean isInitialized = false;
+	Date date = new Date();
+	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
 	
 	Font font;
 	int score;
@@ -64,16 +68,33 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	// render all things calculated in update method and update screen
 	// Slick coordinate system: (0,0) is top left corner! --> Y axis extends down, X extends right
 	public void render(GameContainer gc, StateBasedGame sgb, Graphics g) throws SlickException {
-		// TODO Auto-generated method stub
-
+		
+	
 		g.setBackground(backgroundColor);
 		logo.draw(280,25,450,130);
 		// render text for score box
 		//g.setFont(font);
 		g.setColor(Color.blue);
-		g.drawString("Score: \n" +"  "+score, 650, 150);
-		g.drawString("Time Remaining:  " +"  "+ timeLeft, 650, 135);
-				
+		g.drawString("Score: \n" +"  "+score, 600, 200);
+		
+		// get the time left
+		if (getClient().getGameData().getSongName().equals("1")){
+			secLeft = (158  +(initsec- System.currentTimeMillis())/1000)%60;
+			minLeft = ((158  +(initmin- System.currentTimeMillis())/1000)/60)%60;
+			if(secLeft <=9){
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
+			}else
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
+		}
+		if (getClient().getGameData().getSongName().equals("2")){
+			secLeft = (160  +(initsec- System.currentTimeMillis())/1000)%60;
+			minLeft = ((160  +(initmin- System.currentTimeMillis())/1000)/60)%60;
+			if(secLeft <=9){
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
+			}else
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
+		}
+	
 		/*
 		 * 
 		 * SLOW EVERYTHING DOWN BY 80 MILLIS TO MAKE ANIMATIONS SMOOTHER
@@ -227,11 +248,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initPenta();
 		initTri();
 		initCircle();
-		song1Timer = 158;
-		song2Timer = 160;
-		
-		
-		
+
 		/*
 		 * Initialize Thread
 		 */
@@ -379,14 +396,35 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		*/
 		
 		
+		
 		if (sbg.getCurrentStateID() == 1 && !isInitialized){ 
 			System.out.println("***Starting Thread in GamePlay***");
 			initGameGen(); // if myGameGen is null, initialize it
+			
 			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
-			if (getClient().getGameData().getSongName().equals("1")) song1.play(); // play song 1
-			if (getClient().getGameData().getSongName().equals("2")) song2.play(); // play song 2
-			
-			
+			if (getClient().getGameData().getSongName().equals("1")){
+				song1.play(); // play song 1
+				secLeft = 0;
+				minLeft = 0;
+				
+				songmin = 2;
+				songsec = 38;
+				
+				initsec = System.currentTimeMillis();
+				initmin = System.currentTimeMillis();
+			}
+			if (getClient().getGameData().getSongName().equals("2")){
+				song2.play(); // play song 2
+				
+				secLeft = 0;
+				minLeft = 0;
+				
+				songmin = 2;
+				songsec = 40;
+				
+				initsec = (System.currentTimeMillis()/1000)%60;
+				initmin = (System.currentTimeMillis()/1000/60)%60;
+			}
 			
 			
 			
