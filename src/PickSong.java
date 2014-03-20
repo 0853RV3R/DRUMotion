@@ -118,7 +118,7 @@ public class PickSong extends GameStateBase<GameData,States>{
 		
 		Input input = gc.getInput();
 		
-		if(  continueClick){
+		if(  continueClick && (this.getSong() == 1 || this.getSong() ==2)){
 			// go to pick song
 			continueClick = false;
 			getClient().getGameData().setSongName(getSong().toString());// set song in game data

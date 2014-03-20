@@ -35,17 +35,16 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private boolean isTriSignaled,isTriHit,isTriError;
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
-	private long minTime, maxTime, durationTime;
+	private long minTime, maxTime, durationTime,lastFrame;
 	GameGenerator2 myGameGen = null;
 	Thread myThread =null;
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
-	private int timer;
+	private int timer, timeLeft, song1Timer, song2Timer;
 	private int timerLast = 1500;
 	boolean fade;
 	boolean isInitialized = false;
-	long startTime, currentTime, endTime;
 	boolean isTimeUp;
 	Font font;
 	int score;
@@ -73,13 +72,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
-		
-		/*
-		 * 
-		 * COUNTDOWN TIMER STUFF
-		 */
-		
-		
+		g.drawString("Time Remaining:  " +"  "+ timeLeft, 650, 135);
 				
 		/*
 		 * 
@@ -234,6 +227,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initPenta();
 		initTri();
 		initCircle();
+		song1Timer = 158;
+		song2Timer = 160;
 		
 		
 		
@@ -253,7 +248,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initMusic();
 		
 		
-	}
+	}// end of init method
+	
 	public void initSquare() throws SlickException {
 		isSquareSignaled = false;
 		// square Empty --> Unpressed (signal)
@@ -359,6 +355,21 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			}
 	}
 	
+	
+	public long getTime() {
+		return System.nanoTime() / 1000000;
+	}
+	
+	public int getDelta() {
+		long time = getTime();
+		int delta = (int) (time - lastFrame);
+		lastFrame = time;
+		
+		return delta;
+	}
+	
+	
+	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
 	// 't' ensures objects move at same speed, even with different frame rates
@@ -375,16 +386,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			System.out.println("***Starting Thread in GamePlay***");
 			initGameGen(); // if myGameGen is null, initialize it
 			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
-			if (getClient().getGameData().getSongName().equals("1")){
-				song1.play(); // play song 1
-				startTime = System.currentTimeMillis();
-				endTime = startTime + 155000;
-			}
-			if (getClient().getGameData().getSongName().equals("2")){
-				song2.play(); // play song 2
-				startTime = System.currentTimeMillis();
-				endTime = startTime + 165000;
-			}
+			if (getClient().getGameData().getSongName().equals("1")) song1.play(); // play song 1
+			if (getClient().getGameData().getSongName().equals("2")) song2.play(); // play song 2
 			
 			
 			
@@ -427,16 +430,32 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		
-
-		
-		// if back is pressed go to User Screen -- dont save any stats
+		// if back is pressed go to Stats screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
+
 					endGameToUserScreen(sbg);
 				}
 		// if game is done (countdown timer is done), go to Stats screen
 				if( isTimeUp ){
+
+					song2.pause(); // pause song
 					
-					endGameToResults(sbg);
+					//update GameData for User
+					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
+					getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
+					getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
+
+					
+					// end game generator while loop
+					myGameGen.kill(); //indicates target thread should stop running
+					score = 0;
+					hits = 0;
+					misses = 0;
+						
+					isInitialized = false;
+					
+					// go to stats page
+					sbg.enterState(4);
 				}
 				
 				
@@ -548,44 +567,41 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 	} // end method update()
-	
-	
 	private void endGameToUserScreen(StateBasedGame sbg) {
-		// TODO Auto-generated method stub
-		song2.pause(); // pause song
-		// end game generator while loop
-		myGameGen.kill(); //indicates target thread should stop running
-		score = 0;
-		hits = 0;
-		misses = 0;
-			
-		isInitialized = false;
-		
-		// go to user page
-		sbg.enterState(6);
-	}
-
-	private void endGameToResults(StateBasedGame sbg) {
-		song2.pause(); // pause song
-		
-		//update GameData for User
-		getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-		getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
-		getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
-		
-		// end game generator while loop
-		myGameGen.kill(); //indicates target thread should stop running
-		// reset game score values
-		score = 0;
-		hits = 0;
-		misses = 0;
-			
-		isInitialized = false;
-		
-		// go to stats page
-		sbg.enterState(4);
-	}
-
+		 		// TODO Auto-generated method stub
+		 		song2.pause(); // pause song
+		 		// end game generator while loop
+		 		myGameGen.kill(); //indicates target thread should stop running
+		 		score = 0;
+		 		hits = 0;
+		 		misses = 0;
+		 			
+		 		isInitialized = false;
+		 		
+		 		// go to user page
+		 		sbg.enterState(6);
+		 	}
+		 
+		 	private void endGameToResults(StateBasedGame sbg) {
+		 		// TODO Auto-generated method stub
+		 		song2.pause(); // pause song
+		 		
+		 		//update+store GameData for User
+		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
+		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
+		 		
+		 	// end game generator while loop
+		 		myGameGen.kill(); //indicates target thread should stop running
+		 		score = 0;
+		 	hits = 0;
+		 		misses = 0;
+		 			
+		 		isInitialized = false;
+		 		
+		 		// go to stats page
+		 		sbg.enterState(4);
+		 	}
+	
 	public void setDrums(int drum) throws InterruptedException{
 		
 		switch (drum){
