@@ -31,6 +31,7 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 		//test listener
 		
 		System.out.println( "x = " + x + "  y = " +y);
+		System.out.println("User: "+getClient().getGameData().getUserName());
 
 		//See if they click continue or back
 		if  (125 <= x && x <= 375 && 255 <= y && y <= 405){
@@ -79,7 +80,7 @@ public class UserScreen  extends GameStateBase<GameData,States>{
 			editClick = false;
 			sbg.enterState(10);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || logoutClick){
+		if(  logoutClick){
 			// go to home
 			logoutClick = false;
 			sbg.enterState(0);

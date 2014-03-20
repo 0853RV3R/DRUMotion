@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import java.sql.*;
 
 
 public class Statistics  extends GameStateBase<GameData,States>{
@@ -25,8 +26,6 @@ public class Statistics  extends GameStateBase<GameData,States>{
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
 		Background = new Image("res/Screens/Results.png");	
-		
-		
 	}
 
 	
@@ -36,16 +35,69 @@ public class Statistics  extends GameStateBase<GameData,States>{
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1360,770);
 		
-		//write stats
-		g.setColor(Color.darkGray);
-		g.drawString(""+score+"", 536, 275);
-		hits = 10;
-		misses = 5;
+		//do updates
+		score = getClient().getGameData().getCurrentScore();
+		hits = getClient().getGameData().getHits();
+		misses = getClient().getGameData().getMisses();
+		
 		if ((hits + misses) > 0){
 			percentage = hits*100/(hits + misses);
 		}
 		else
 			percentage = -1;
+		
+		//update database
+		Connection c = null;
+		Statement stmt = null;
+		int overallPercentage = 0;
+		int overallHits = 0;
+		int overallMisses = 0;
+		int overallGamesPlayed = 0;
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:res/Database/drummotion");
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			//get current data
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM users WHERE name = \""+getClient().getGameData().getUserName()+"\";" );
+			while ( rs.next() ) {
+				overallPercentage = rs.getInt("percentage");
+				overallHits = rs.getInt("hits");
+				overallMisses = rs.getInt("misses");
+				overallGamesPlayed = rs.getInt("gamesPlayed");
+			}
+			rs.close();
+			
+			//update values
+			overallGamesPlayed++;
+			overallHits += hits;
+			overallMisses += misses;
+			if ((overallHits + overallMisses) > 0){
+				overallPercentage = overallHits*100/(overallHits + overallMisses);
+			}
+			else
+				overallPercentage = -1;
+			
+			String sql = "UPDATE users "+
+					"SET gamesPlayed = "+overallGamesPlayed+", percentage = "+overallPercentage+", hits = "+
+						+overallHits+", misses = "+overallMisses+" "+
+							"WHERE name = \""+getClient().getGameData().getUserName()+"\";";
+			stmt.executeUpdate(sql);
+		    c.commit();
+			stmt.close();
+			c.close();
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+
+
+		
+		//write stats
+		g.setColor(Color.darkGray);
+		g.drawString(""+score+"", 536, 275);
 		g.drawString(""+percentage+"%", 536, 324);
 		g.drawString(""+hits+"", 536, 366);
 		g.drawString(""+misses+"", 536, 413);
@@ -74,16 +126,16 @@ public class Statistics  extends GameStateBase<GameData,States>{
 		
 		Input input = gc.getInput();
 		
-		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
+		if(  backClick){
 			// go to home
 			backClick = false;
 			sbg.enterState(6);
 		}
-		if( input.isKeyPressed(Input.KEY_BACK) || playClick){
+		if(  playClick){
 			// go to game
 			playClick = false;
 			//TODO Change to return to game
-			sbg.enterState(6);
+			sbg.enterState(1);
 		}
 	}
 

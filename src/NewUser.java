@@ -122,6 +122,8 @@ public class NewUser extends GameStateBase<GameData,States> {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		    }
+			//set username to the GameData
+			getClient().getGameData().setUserName(userName);
 		}
 		if( backClick){
 			// go to home

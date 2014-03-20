@@ -1,6 +1,9 @@
 
 
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -33,14 +36,15 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
 	private long minTime, maxTime, durationTime;
-	GameGenerator2 myGameGen;
-	Thread myThread;
+	GameGenerator2 myGameGen = null;
+	Thread myThread =null;
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
 	private int timer;
 	private int timerLast = 1500;
 	boolean fade;
+	boolean isInitialized = false;
 	
 	Font font;
 	int score;
@@ -89,7 +93,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					squareHit.draw(50, 400, 150, 150);
 					squareHit.stopAt(1);
 					isSquareHit = false;
-					hits++;
+					
 					
 					// code for score fade in and out
 					float timerPercent = (float) timer / timerLast;
@@ -108,7 +112,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					squareError.draw(50, 400, 150, 150);
 					squareError.stopAt(1);
 					isSquareError = false;
-					misses++;
+					
 				}
 				else if (!isSquareSignaled){  // empty (no signal)
 					square.draw(50, 400, 150, 150);
@@ -124,7 +128,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			pentaHit.draw(200, 200, 150, 150);
 			pentaHit.stopAt(1);
 			isPentaHit = false;
-			hits++;
+			
 		}
 		else if (isPentaSignaled){ // signal on
 			
@@ -136,7 +140,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			pentaError.draw(200, 200, 150, 150);
 			pentaError.stopAt(1);
 			isPentaError = false;
-			misses++;
+			
 		}
 		else if (!isPentaSignaled){  // empty (no signal)
 			penta.draw(200, 200, 150, 150);
@@ -148,7 +152,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					triHit.draw(400, 300, 150, 150);
 					triHit.stopAt(1);
 					isTriHit = false;
-					hits++;
+					
 				}
 				else if (isTriSignaled){ // signal on
 					
@@ -160,7 +164,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					triError.draw(400, 300, 150, 150);
 					triError.stopAt(1);
 					isTriError = false;
-					misses++;
+					
 				}
 				else if (!isTriSignaled){  // empty (no signal)
 					tri.draw(400, 300, 150, 150);
@@ -172,7 +176,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					circleHit.draw(600, 400, 150, 150);
 					circleHit.stopAt(1);
 					isCircleHit = false;
-					hits++;
+					
 				}
 				else if (isCircleSignaled){ // signal on
 					
@@ -184,7 +188,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					circleError.draw(600, 400, 150, 150);
 					circleError.stopAt(1);
 					isCircleError = false;
-					misses++;
+					
 				}
 				else if (!isCircleSignaled){  // empty (no signal)
 					circle.draw(600, 400, 150, 150);
@@ -228,20 +232,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		/*
 		 * Initialize Thread
 		 */
-		myGameGen = new GameGenerator2(1);// runnable task
-		myThread = new Thread(myGameGen); // run the runnable task in a thread
-		
-		// START THREAD here?
-		/*
-		if (sbg.getCurrentStateID() == 1){
-		System.out.println("***Starting Thread in GamePlay***");
-		
-		myThread.start(); // start thread
-		}
-		else{
-			System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
-			}
-		 */
+		//initGameThread();
 		
 		// set font:
 		//font = new UnicodeFont( new java.awt.Font("Copperplate", java.awt.Font.PLAIN, 14));
@@ -344,10 +335,21 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	}
 	
 	public void initMusic() throws SlickException{
-		song1 =new Music("res/Music/Younevercantell.ogg");
-		song2 = new Music("res/Music/Spindizzy.ogg");
+		song2 =new Music("res/Music/Younevercantell.ogg");
+		song1 = new Music("res/Music/Spindizzy.ogg");
 	}
 	
+	public void initGameGen(){
+		System.out.println("**initGameGen()**");
+			if (myGameGen == null ){
+			myGameGen = new GameGenerator2(1);// runnable task
+			System.out.println("New Runnable Instance Made");
+			}
+			else if(!myGameGen.isRunning()){
+				myGameGen.revive();
+				
+			}
+	}
 	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
@@ -356,25 +358,40 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	public void update(GameContainer gc, StateBasedGame sbg, int t) throws SlickException {
 		
 		/* thread business:
-		 If game state is correct and myThread is NOT started, then start new thread
-		 Else if Game state is correct and myThread IS started, then do nothing
+		 If game state is correct Game Generator is null, then initialize it and start execution
+		
 		*/
 		
-		if (sbg.getCurrentStateID() == 1 && !myThread.isAlive() && !alert){ 
+		
+		if (sbg.getCurrentStateID() == 1 && !isInitialized){ 
 			System.out.println("***Starting Thread in GamePlay***");
+			initGameGen(); // if myGameGen is null, initialize it
+			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
+			if (getClient().getGameData().getSongName().equals("1")) song1.play(); // play song 1
+			if (getClient().getGameData().getSongName().equals("2")) song2.play(); // play song 2
 			
-			myThread.start(); // start thread
-			song2.play();
+			
+			
+			
+			
+			Executor executor = Executors.newSingleThreadExecutor();
+			executor.execute(myGameGen);// start gamegen
+			
+			isInitialized = true;
 			
 			}
-		else if (sbg.getCurrentStateID() == 1 && myThread.isAlive()){
-			// nothing to do here
-		}
-		else{
+		
+		
+		if (sbg.getCurrentStateID() != 1)
+			{
 				System.out.println("Current State ID is " +sbg.getCurrentStateID() + ", not 1 -- thread will not start");
 			}
 		
-		//code for score fade in and out
+		
+		/*
+		 * code for score fade in and out
+		 * 
+		 * 
 		if (fade) {
 	         timer += t;
 	         if (timer > timerLast) {
@@ -386,7 +403,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	            fade = !fade;
 	         }
 	      }
-		
+		*/ 
 		
 		// to get input from game container
 		Input input = gc.getInput();
@@ -397,20 +414,25 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		// if back is pressed go to HomeScreen
 				if( input.isKeyDown(Input.KEY_BACK) ){
-					// first stop thread
-					alert = true;
-					song2.pause();
+					song2.pause(); // pause song
 					
-					myGameGen.setStopFlag(true);
-					try {
-						myThread.join();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// go to home
-					sbg.enterState(3);
+					//update GameData for User
+					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
+					getClient().getGameData().setHits(getClient().getGameData().getMisses() + misses);
+					
+					// end game generator while loop
+					myGameGen.kill(); //indicates target thread should stop running
+					score = 0;
+					hits = 0;
+					misses = 0;
+						
+					isInitialized = false;
+					
+					// go to stats page
+					sbg.enterState(4);
 				}
+				
+				
 		// to adjust animations to frame rate
 		squareSignal.update(t);
 		squareError.update(t);
@@ -430,28 +452,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		
-		/*
-		 * 
-		 * THE FOLLOWING SIMULATES SIGNALS TO HIT DRUMS
-		 */
-		/*
-		if (input.isKeyPressed(Input.KEY_A)) isSquareSignaled = false;// animation off
-		if (input.isKeyPressed(Input.KEY_Z)) isSquareSignaled = true;// animation on
 		
-		if (input.isKeyPressed(Input.KEY_S)) isPentaSignaled = false;// animation off
-		if (input.isKeyPressed(Input.KEY_X)) isPentaSignaled = true;// animation on
-		if (input.isKeyPressed(Input.KEY_D)) isTriSignaled = false;// animation off
-		if (input.isKeyPressed(Input.KEY_C)) isTriSignaled = true;// animation on
-		if (input.isKeyPressed(Input.KEY_F)) isCircleSignaled = false;// animation off
-		if (input.isKeyPressed(Input.KEY_V)) isCircleSignaled = true;// animation on
-		
-		*/
-		/*try {
-			Thread.sleep(50);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
 		
 		
 		try {
@@ -469,31 +470,22 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		/*
 		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
-		 * 
+		 * score is increased by 1 and drum sound is played if correct drum is hit
+		 * score is decreased by 5 if incorrect drum is hit
 		 */
 		
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
 			if(isSquareSignaled){
 				drumSound1.playAt(-1,0,0);
-				score += 5;
+				score += 1;
+				hits++;
 				isSquareHit = true;// animation on
-				//code for score fade in and out
-				
-			         timer += t;
-			         if (timer > timerLast) {
-			            fade = !fade;
-			         }
-			      } else {
-			         timer -= t;
-			         if (timer < 0) {
-			            fade = !fade;
-			         }
-			      
 				
 			}
 			if(!isSquareSignaled){
 				score -= 5;
+				misses++;
 				isSquareError = true;// animation on
 			}
 
@@ -502,11 +494,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		if (input.isKeyPressed(Input.KEY_8)){
 			if(isPentaSignaled){
 				drumSound2.playAt(0,1,0);
-				score += 5;
+				score += 1;
+				hits++;
 				isPentaHit = true;// animation on
 			}
 			if(!isPentaSignaled){
 				score -= 5;
+				misses++;
 				isPentaError = true;// animation on
 			}
 
@@ -515,11 +509,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		if (input.isKeyPressed(Input.KEY_9)){
 			if(isTriSignaled){
 				drumSound3.playAt(0,0.5f,0.5f);
-				score += 5;
+				score += 1;
+				hits++;
 				isTriHit = true;// animation on
 			}
 			if(!isTriSignaled){
 				score -= 5;
+				misses++;
 				isTriError = true;// animation on
 			}
 
@@ -528,11 +524,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		if (input.isKeyPressed(Input.KEY_0)){
 			if(isCircleSignaled){
 				drumSound4.playAt(0,0,-1);
-				score += 5;
+				score += 1;
+				hits++;
 				isCircleHit = true;// animation on
 			}
 			if(!isCircleSignaled){
 				score -= 5;
+				misses++;
 				isCircleError = true;// animation on
 			}
 
@@ -560,19 +558,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		}// end switch
 		
 		
-		/*
-		switch (drum){ // restore
-		case 1: isSquareSignaled = false;
-			break;
-		case 2: isPentaSignaled = false;
-			break;
-		case 3: isTriSignaled = false;
-			break;
-		case 4: isCircleSignaled = false;
-			break;
 		
-		}// end switch
-		*/
 		
 	}// end method setDrums()
 	

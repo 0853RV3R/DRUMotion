@@ -67,8 +67,8 @@ public class Home  extends BasicGameState{
 		}
 		if( loginClick){
 			// go to home
-			loginClick = false;
-			sbg.enterState(3);
+			loginClick = false; //reset flag
+			sbg.enterState(3);//login page
 		}
 		if( exitClick){
 			// quit game
