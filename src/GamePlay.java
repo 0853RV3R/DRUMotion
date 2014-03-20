@@ -45,6 +45,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int timerLast = 1500;
 	boolean fade;
 	boolean isInitialized = false;
+	long startTime, currentTime, endTime;
 	
 	Font font;
 	int score;
@@ -72,6 +73,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
+		
+		/*
+		 * 
+		 * COUNTDOWN TIMER STUFF
+		 */
+		
+		
 				
 		/*
 		 * 
@@ -367,8 +375,16 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			System.out.println("***Starting Thread in GamePlay***");
 			initGameGen(); // if myGameGen is null, initialize it
 			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
-			if (getClient().getGameData().getSongName().equals("1")) song1.play(); // play song 1
-			if (getClient().getGameData().getSongName().equals("2")) song2.play(); // play song 2
+			if (getClient().getGameData().getSongName().equals("1")){
+				song1.play(); // play song 1
+				startTime = System.currentTimeMillis();
+				endTime = startTime + 155000;
+			}
+			if (getClient().getGameData().getSongName().equals("2")){
+				song2.play(); // play song 2
+				startTime = System.currentTimeMillis();
+				endTime = startTime + 165000;
+			}
 			
 			
 			
@@ -412,24 +428,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		
-		// if back is pressed go to HomeScreen
+		// if back is pressed go to User Screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
-					song2.pause(); // pause song
-					
-					//update GameData for User
-					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-					getClient().getGameData().setHits(getClient().getGameData().getMisses() + misses);
-					
-					// end game generator while loop
-					myGameGen.kill(); //indicates target thread should stop running
-					score = 0;
-					hits = 0;
-					misses = 0;
-						
-					isInitialized = false;
-					
-					// go to stats page
-					sbg.enterState(4);
+					endGameToUserScreen(sbg);
 				}
 				
 				
@@ -543,6 +544,41 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	} // end method update()
 	
 	
+	private void endGameToUserScreen(StateBasedGame sbg) {
+		// TODO Auto-generated method stub
+		song2.pause(); // pause song
+		// end game generator while loop
+		myGameGen.kill(); //indicates target thread should stop running
+		score = 0;
+		hits = 0;
+		misses = 0;
+			
+		isInitialized = false;
+		
+		// go to user page
+		sbg.enterState(6);
+	}
+
+	private void endGameToResults(StateBasedGame sbg) {
+		// TODO Auto-generated method stub
+		song2.pause(); // pause song
+		
+		//update+store GameData for User
+		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
+		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
+		
+		// end game generator while loop
+		myGameGen.kill(); //indicates target thread should stop running
+		score = 0;
+		hits = 0;
+		misses = 0;
+			
+		isInitialized = false;
+		
+		// go to stats page
+		sbg.enterState(4);
+	}
+
 	public void setDrums(int drum) throws InterruptedException{
 		
 		switch (drum){

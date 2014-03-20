@@ -3,8 +3,11 @@ public class GameData {
 	public String UserName ="";
 	public String SongName ="";
 	public int currentScore = 0;
+	public int currentHits = 0;
+	public int currentMisses = 0;
 	public int hits = 0;
 	public int misses = 0;
+	public int score = 0;
 	
 	public String getUserName() {
 		return UserName;
@@ -23,6 +26,18 @@ public class GameData {
 	}
 	public void setCurrentScore(int currentScore) {
 		this.currentScore = currentScore;
+	}
+	public int getCurrentHits() {
+		return currentHits;
+	}
+	public void setCurrentHits(int currentHits) {
+		this.currentHits = currentHits;
+	}
+	public int getCurrentMisses() {
+		return currentMisses;
+	}
+	public void setCurrentMisses(int currentMisses) {
+		this.currentMisses = currentMisses;
 	}
 	public int getHits() {
 		return hits;
