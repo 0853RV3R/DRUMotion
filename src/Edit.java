@@ -20,7 +20,7 @@ public class Edit extends BasicGameState{
 	
 	
 	public Edit() {
-		super();
+		super();	
 	}
 
 	
