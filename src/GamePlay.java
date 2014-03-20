@@ -35,13 +35,13 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private boolean isTriSignaled,isTriHit,isTriError;
 	private boolean isCircleSignaled,isCircleHit,isCircleError;
 	private int minDrum, maxDrum, drum;
-	private long minTime, maxTime, durationTime;
+	private long minTime, maxTime, durationTime,lastFrame;
 	GameGenerator2 myGameGen = null;
 	Thread myThread =null;
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
-	private int timer;
+	private int timer, song1Timer, song2Timer;
 	private int timerLast = 1500;
 	boolean fade;
 	boolean isInitialized = false;
@@ -72,6 +72,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 650, 150);
+		g.drawString("Time Remaining:  " +"  "+ time, 650, 135);
 				
 		/*
 		 * 
@@ -226,6 +227,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initPenta();
 		initTri();
 		initCircle();
+		song1Timer = 158;
+		song2Timer = 160;
 		
 		
 		
@@ -349,6 +352,19 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				myGameGen.revive();
 				
 			}
+	}
+	
+	
+	public long getTime() {
+		return System.nanoTime() / 1000000;
+	}
+	
+	public int getDelta() {
+		long time = getTime();
+		int delta = (int) (time - lastFrame);
+		lastFrame = time;
+		
+		return delta;
 	}
 	
 	// update: called every frame update, BEFORE render method

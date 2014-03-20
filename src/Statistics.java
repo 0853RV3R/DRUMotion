@@ -135,7 +135,12 @@ public class Statistics  extends GameStateBase<GameData,States>{
 		}
 		if(  playClick){
 			// go to game
+			getClient().getGameData().setHits(0);
+			getClient().getGameData().setMisses( 0);
+			getClient().getGameData().setCurrentScore( 0);
+			
 			playClick = false;
+			
 			//TODO Change to return to game
 			sbg.enterState(1);
 		}
