@@ -7,6 +7,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 
 public class PickSong extends GameStateBase<GameData,States>{
@@ -125,6 +127,7 @@ public class PickSong extends GameStateBase<GameData,States>{
 			System.out.print("Song Chosen: ");
 			System.out.println(getClient().getGameData().getSongName());
 			sbg.enterState(9);
+			
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to user page
