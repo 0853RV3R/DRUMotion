@@ -7,6 +7,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 
 public class Instructions extends GameStateBase<GameData,States>{
@@ -65,7 +67,7 @@ public class Instructions extends GameStateBase<GameData,States>{
 		if(  input.isKeyPressed(Input.KEY_ENTER) || continueClick){
 			// go to game play
 			continueClick = false;
-			sbg.enterState(1);
+			sbg.enterState(1, new FadeOutTransition(),new FadeInTransition());
 		}
 		if( input.isKeyPressed(Input.KEY_BACK) || backClick){
 			// go to pick a song

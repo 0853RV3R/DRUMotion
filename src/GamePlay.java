@@ -18,6 +18,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 
 
@@ -25,7 +27,7 @@ import org.newdawn.slick.state.StateBasedGame;
 // A basic scene:
 public class GamePlay extends GameStateBase<GameData,States>{
 	// assign variable to picture
-	private Image logo;
+	private Image logo, pause;
 	private Image square, penta,tri, circle;
 	private Animation squareSignal, squareHit, squareError;
 	private Animation pentaSignal, pentaHit, pentaError;
@@ -43,9 +45,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	Color backgroundColor;
 	private boolean alert = false;
 	private int timer;
-	long timeLeft;
+	long timeLeft,pauseTime;
 	private int timerLast = 1500;
-	boolean fade;
+	boolean fade, isPaused;
 	boolean isInitialized = false;
 	Date date = new Date();
 	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
@@ -62,7 +64,6 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	
 	public GamePlay(ClientBase<GameData> theClient, States theState) {
 		super(theClient, theState);
-		// TODO Auto-generated constructor stub
 	}
 
 	//render: called every frame update 
@@ -73,28 +74,36 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	
 		g.setBackground(backgroundColor);
 		logo.draw(280,25,450,130);
+		
 		// render text for score box
 		//g.setFont(font);
 		g.setColor(Color.blue);
 		g.drawString("Score: \n" +"  "+score, 600, 200);
 		
 		// get the time left
-		if (getClient().getGameData().getSongName().equals("1")){
-			secLeft = (158  +(initsec- System.currentTimeMillis())/1000)%60;
-			minLeft = ((158  +(initmin- System.currentTimeMillis())/1000)/60)%60;
-			if(secLeft <=9){
-				g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
-			}else
-				g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
+		if (!isPaused){
+			
+	
+			if (getClient().getGameData().getSongName().equals("1")){
+				secLeft = (158  +(initsec- System.currentTimeMillis())/1000)%60;
+				minLeft = ((158  +(initmin- System.currentTimeMillis())/1000)/60)%60;
+				if(secLeft <=9){
+					g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
+				}else
+					g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
+			}
+			if (getClient().getGameData().getSongName().equals("2")){
+				secLeft = (160  +(initsec- System.currentTimeMillis())/1000)%60;
+				minLeft = ((160  +(initmin- System.currentTimeMillis())/1000)/60)%60;
+				if(secLeft <=9){
+					g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
+				}else
+					g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
+			}
+	
+
 		}
-		if (getClient().getGameData().getSongName().equals("2")){
-			secLeft = (160  +(initsec- System.currentTimeMillis())/1000)%60;
-			minLeft = ((160  +(initmin- System.currentTimeMillis())/1000)/60)%60;
-			if(secLeft <=9){
-				g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
-			}else
-				g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
-		}
+	
 	
 		/*
 		 * 
@@ -103,29 +112,28 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		try { 
 			Thread.sleep(80);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		
+//		// code for score fade in and out
+//		  float timerPercent = (float) timer / timerLast;
+//	      int alphaPercent = (int) (255 * timerPercent);
+//	      g.setColor(new Color(255, 255, 255, alphaPercent));
+//	      g.drawString("test", 0, 0);
+//	      
+	      
 		//Square Logic
 		
-				if(isSquareHit && isSquareSignaled){ // signaled and hit
+				if(isSquareHit && isSquareSignaled&& !isPaused){ // signaled and hit
 					squareSignal.stopAt(1);
 					squareHit.draw(50, 400, 150, 150);
 					squareHit.stopAt(1);
 					isSquareHit = false;
 					
-					
-					// code for score fade in and out
-					float timerPercent = (float) timer / timerLast;
-				      int alphaPercent = (int) (255 * timerPercent);
-				      g.setColor(new Color(255, 255, 255, alphaPercent));
-				      g.drawString("test", 0, 0);
 
 				}
-				else if (isSquareSignaled){ // signal on
+				else if (isSquareSignaled	&& !isPaused){ // signal on
 					
 					squareSignal.draw(50, 400, 150, 150);
 					
@@ -146,14 +154,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		//Pentagon Logic
-		if(isPentaHit && isPentaSignaled){ // signaled and hit
+		if(isPentaHit && isPentaSignaled && !isPaused){ // signaled and hit
 			pentaSignal.stopAt(1);
 			pentaHit.draw(200, 200, 150, 150);
 			pentaHit.stopAt(1);
 			isPentaHit = false;
 			
 		}
-		else if (isPentaSignaled){ // signal on
+		else if (isPentaSignaled && !isPaused){ // signal on
 			
 			pentaSignal.draw(200, 200, 150, 150);
 			
@@ -170,14 +178,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				
 			}
 		//Tri Logic
-				if(isTriHit && isTriSignaled){ // signaled and hit -- working!
+				if(isTriHit && isTriSignaled && !isPaused){ // signaled and hit -- working!
 					triSignal.stopAt(1);
 					triHit.draw(400, 300, 150, 150);
 					triHit.stopAt(1);
 					isTriHit = false;
 					
 				}
-				else if (isTriSignaled){ // signal on
+				else if (isTriSignaled && !isPaused){ // signal on
 					
 					triSignal.draw(400, 300, 150, 150);
 					
@@ -194,19 +202,19 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						
 				}		
 				// Circle Logic
-				if(isCircleHit && isCircleSignaled){ // signaled and hit
+				if(isCircleHit && isCircleSignaled && !isPaused){ // signaled and hit
 					circleSignal.stopAt(1);
 					circleHit.draw(600, 400, 150, 150);
 					circleHit.stopAt(1);
 					isCircleHit = false;
 					
 				}
-				else if (isCircleSignaled){ // signal on
+				else if (isCircleSignaled && !isPaused){ // signal on
 					
 					circleSignal.draw(600, 400, 150, 150);
 					
 				}
-				else if (!isCircleSignaled && isCircleError){ // no signal, hit in error
+				else if (!isCircleSignaled && isCircleError && !isPaused){ // no signal, hit in error
 					circleSignal.stopAt(0);
 					circleError.draw(600, 400, 150, 150);
 					circleError.stopAt(1);
@@ -216,13 +224,12 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				else if (!isCircleSignaled){  // empty (no signal)
 					circle.draw(600, 400, 150, 150);
 						
-					}		 
-		
-		
-		
-		
-	
-		
+					}	
+				
+				//draw pause when p is hit
+				if (isPaused){
+					pause.draw(150,300,450,130);
+				}
 
 	}
 
@@ -241,6 +248,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		penta = new Image("res/Drums/pentagon empty.png");
 		tri = new Image("res/Drums/triangle empty.png");
 		circle = new Image("res/Drums/circle empty.png");
+		pause = new Image("res/Buttons/pause.png");
 		// set initial score to zero
 		score = 0;
 		hits = 0;
@@ -264,7 +272,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 */
 		initSounds();
 		initMusic();
-		
+		isPaused = false;
 		
 	}// end of init method
 	
@@ -415,8 +423,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				songmin = 2;
 				songsec = 40;
 				
-				initsec = (System.currentTimeMillis()/1000)%60;
-				initmin = (System.currentTimeMillis()/1000/60)%60;
+				initsec = System.currentTimeMillis();
+				initmin = System.currentTimeMillis();
 			}
 			
 			
@@ -466,8 +474,26 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					
 					endGameToResults(sbg);
 				}
+				//if p is pressed go pause the game
+				if( input.isKeyDown(Input.KEY_P) ){
+					
+						song2.pause();
+						isPaused = true;
+						System.out.println("Game Paused");
+						
+						pauseTime = System.currentTimeMillis();
+								
+				}	
+				if(input.isKeyDown(Input.KEY_ENTER)){
+					song2.resume();
+					isPaused = false;
+					System.out.println("Game back On");
+				}
+
+
 				
 				
+
 		// to adjust animations to frame rate
 		squareSignal.update(t);
 		squareError.update(t);
@@ -584,7 +610,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isInitialized = false;
 
 		// go to user page
-		sbg.enterState(5);
+		sbg.enterState(5, new FadeOutTransition(),new FadeInTransition());
 	}
 		 
 	private void endGameToResults(StateBasedGame sbg) {
@@ -605,7 +631,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		isInitialized = false;
 
 		// go to stats page
-		sbg.enterState(4);
+		sbg.enterState(4, new FadeOutTransition(),new FadeInTransition());
 	}
 	
 	public void setDrums(int drum) throws InterruptedException{
