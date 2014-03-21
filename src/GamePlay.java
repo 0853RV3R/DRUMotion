@@ -49,14 +49,17 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	boolean isInitialized = false;
 	Date date = new Date();
 	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
-	
+	SerialInput drumPads = null;
 	boolean isTimeUp;
 	Font font;
 	int score;
 	int hits, misses;
 	Sound drumSound1, drumSound2, drumSound3, drumSound4;
 	Music song1, song2, song3, song4;
-	
+	public static boolean isDrum1Hit =false;
+	public static boolean isDrum2Hit =false;
+	public static boolean isDrum3Hit =false;
+	public static boolean isDrum4Hit =false;
 	
 	
 	
@@ -266,6 +269,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initMusic();
 		
 		
+		
 	}// end of init method
 	
 	public void initSquare() throws SlickException {
@@ -434,6 +438,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			
 			Executor executor = Executors.newSingleThreadExecutor();
 			executor.execute(myGameGen);// start gamegen
+			drumPads = new SerialInput();
+			drumPads.initialize();
+			System.out.println("Started DrumPads");
 			
 			isInitialized = true;
 			
@@ -491,6 +498,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					hits = 0;
 					misses = 0;
 						
+					drumPads.close();
 					isInitialized = false;
 					
 					// go to stats page
@@ -532,6 +540,68 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			e.printStackTrace();
 		}
 		
+		
+		// square
+				if (isDrum1Hit){
+					if(isSquareSignaled){
+						drumSound1.playAt(-1,0,0);
+						score += 1;
+						hits++;
+						isSquareHit = true;// animation on
+						
+					}
+					if(!isSquareSignaled){
+						score -= 5;
+						misses++;
+						isSquareError = true;// animation on
+					}
+					isDrum1Hit = false;
+				}
+				// pentagon
+				if (isDrum2Hit){
+					if(isPentaSignaled){
+						drumSound2.playAt(0,1,0);
+						score += 1;
+						hits++;
+						isPentaHit = true;// animation on
+					}
+					if(!isPentaSignaled){
+						score -= 5;
+						misses++;
+						isPentaError = true;// animation on
+					}
+					isDrum2Hit = false;
+				}
+				// triangle
+				if (isDrum3Hit){
+					if(isTriSignaled){
+						drumSound3.playAt(0,0.5f,0.5f);
+						score += 1;
+						hits++;
+						isTriHit = true;// animation on
+					}
+					if(!isTriSignaled){
+						score -= 5;
+						misses++;
+						isTriError = true;// animation on
+					}
+					isDrum3Hit = false;
+				}
+				// circle
+				if (isDrum4Hit){
+					if(isCircleSignaled){
+						drumSound4.playAt(0,0,-1);
+						score += 1;
+						hits++;
+						isCircleHit = true;// animation on
+					}
+					if(!isCircleSignaled){
+						score -= 2;
+						misses++;
+						isCircleError = true;// animation on
+					}
+					isDrum4Hit = false;
+				}
 		
 		/*
 		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
@@ -606,6 +676,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 	} // end method update()
+	
 	private void endGameToUserScreen(StateBasedGame sbg) {
 		 		// TODO Auto-generated method stub
 		 		song2.pause(); // pause song
@@ -614,7 +685,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		score = 0;
 		 		hits = 0;
 		 		misses = 0;
-		 			
+		 		drumPads.close();
 		 		isInitialized = false;
 		 		
 		 		// go to user page
@@ -632,9 +703,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 	// end game generator while loop
 		 		myGameGen.kill(); //indicates target thread should stop running
 		 		score = 0;
-		 	hits = 0;
+		 		hits = 0;
 		 		misses = 0;
-		 			
+		 		drumPads.close();
 		 		isInitialized = false;
 		 		
 		 		// go to stats page
