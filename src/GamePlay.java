@@ -52,14 +52,17 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int pauseCount;
 	Date date = new Date();
 	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
-	
+	SerialInput drumPads = null;
 	boolean isTimeUp;
 	Font font;
 	int score;
 	int hits, misses;
 	Sound drumSound1, drumSound2, drumSound3, drumSound4;
 	Music song1, song2, song3, song4;
-	
+	public static boolean isDrum1Hit =false;
+	public static boolean isDrum2Hit =false;
+	public static boolean isDrum3Hit =false;
+	public static boolean isDrum4Hit =false;
 	
 	
 	
@@ -281,6 +284,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		initMusic();
 		isPaused = false;
 		
+		
 	}// end of init method
 	
 	public void initSquare() throws SlickException {
@@ -438,6 +442,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			
 			Executor executor = Executors.newSingleThreadExecutor();
 			executor.execute(myGameGen);// start gamegen
+			drumPads = new SerialInput();
+			drumPads.initialize();
+			System.out.println("Started DrumPads");
 			
 			isInitialized = true;
 			
@@ -472,15 +479,40 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		// if back is pressed go to Stats screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
-					
+					drumPads.close();
 					endGameToUserScreen(sbg);
 				}
+
+		// if game is done (countdown timer is done), go to Stats screen
+				if( isTimeUp ){
+
+					song2.pause(); // pause song
+					
+					//update GameData for User
+					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
+					getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
+					getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
+
+					
+					// end game generator while loop
+					myGameGen.kill(); //indicates target thread should stop running
+					score = 0;
+					hits = 0;
+					misses = 0;
+						
+					drumPads.close();
+					isInitialized = false;
+
 	
 				// if game is done (countdown timer is done), go to Stats screen
 				if( secLeft == 0 && minLeft == 0 && isInitialized){
+
 					
 					endGameToResults(sbg);
 				}
+
+				}
+
 				//if p is pressed go pause the game
 				if( input.isKeyDown(Input.KEY_P) ){
 					
@@ -529,12 +561,77 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			e.printStackTrace();
 		}
 		
+		/*
+		 * INPUT FROM ACTUAL DRUM HARDWARE
+		 * 
+		 */
+		// square
+				if (isDrum1Hit){
+					if(isSquareSignaled){
+						drumSound1.playAt(-1,0,0);
+						score += 1;
+						hits++;
+						isSquareHit = true;// animation on
+						
+					}
+					if(!isSquareSignaled){
+						score -= 5;
+						misses++;
+						isSquareError = true;// animation on
+					}
+					isDrum1Hit = false;
+				}
+				// pentagon
+				if (isDrum2Hit){
+					if(isPentaSignaled){
+						drumSound2.playAt(0,1,0);
+						score += 1;
+						hits++;
+						isPentaHit = true;// animation on
+					}
+					if(!isPentaSignaled){
+						score -= 5;
+						misses++;
+						isPentaError = true;// animation on
+					}
+					isDrum2Hit = false;
+				}
+				// triangle
+				if (isDrum3Hit){
+					if(isTriSignaled){
+						drumSound3.playAt(0,0.5f,0.5f);
+						score += 1;
+						hits++;
+						isTriHit = true;// animation on
+					}
+					if(!isTriSignaled){
+						score -= 5;
+						misses++;
+						isTriError = true;// animation on
+					}
+					isDrum3Hit = false;
+				}
+				// circle
+				if (isDrum4Hit){
+					if(isCircleSignaled){
+						drumSound4.playAt(0,0,-1);
+						score += 1;
+						hits++;
+						isCircleHit = true;// animation on
+					}
+					if(!isCircleSignaled){
+						score -= 2;
+						misses++;
+						isCircleError = true;// animation on
+					}
+					isDrum4Hit = false;
+				}
 		
 		/*
 		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
 		 * score is increased by 1 and drum sound is played if correct drum is hit
 		 * score is decreased by 5 if incorrect drum is hit
-		 */
+		 *
 		
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
@@ -591,7 +688,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isCircleHit = true;// animation on
 			}
 			if(!isCircleSignaled){
-				score -= 5;
+				score -= 2;
 				misses++;
 				isCircleError = true;// animation on
 			}
@@ -599,47 +696,58 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		}
 	}
 	
-	// end method update()
+	
+		*/
+		
+		
+
+		
+				
+	}// end method update()
+	
 	private void endGameToUserScreen(StateBasedGame sbg) {
-		
-		song2.pause(); // pause song
-		
-		//update+store GameData for User
-		getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-		getClient().getGameData().setMisses(getClient().getGameData().getMisses() + misses);
-		getClient().getGameData().setCurrentScore(getClient().getGameData().getCurrentScore() + score);
-		// end game generator while loop
-		myGameGen.kill(); //indicates target thread should stop running
-		score = 0;
-		hits = 0;
-		misses = 0;
+		 		// TODO Auto-generated method stub
+		 		song2.pause(); // pause song
+		 		// end game generator while loop
+		 		myGameGen.kill(); //indicates target thread should stop running
+		 		score = 0;
+		 		hits = 0;
+		 		misses = 0;
+		 		drumPads.close();
+		 		isInitialized = false;
+		 		
+		 		// go to user page
+		 		sbg.enterState(6);
+		 	}
 
-		isInitialized = false;
-
-		// go to user page
-		sbg.enterState(5, new FadeOutTransition(),new FadeInTransition());
-	}
 		 
-	private void endGameToResults(StateBasedGame sbg) {
+		 	private void endGameToResults(StateBasedGame sbg) {
+		 		// TODO Auto-generated method stub
+		 		song2.pause(); // pause song
+		 		
+		 		//update+store GameData for User
+		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
+		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
+		 		getClient().getGameData().setCurrentScore(getClient().getGameData().getCurrentScore() + score);
+		 		
+		 	// end game generator while loop
+		 		myGameGen.kill(); //indicates target thread should stop running
+		 		score = 0;
+		 		hits = 0;
+		 		misses = 0;
+		 		drumPads.close();
+		 		isInitialized = false;
+		 		
+		 		// go to stats page
+		 		sbg.enterState(4);
+		 		//sbg.enterState(4, new FadeOutTransition(),new FadeInTransition());
+		 	}
 
-		song2.pause(); // pause song
 
-		//update+store GameData for User
-		getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-		getClient().getGameData().setMisses(getClient().getGameData().getMisses() + misses);
-		getClient().getGameData().setCurrentScore(getClient().getGameData().getCurrentScore() + score);
+		
+		
 
-		// end game generator while loop
-		myGameGen.kill(); //indicates target thread should stop running
-		score = 0;
-		hits = 0;
-		misses = 0;
 
-		isInitialized = false;
-
-		// go to stats page
-		sbg.enterState(4, new FadeOutTransition(),new FadeInTransition());
-	}
 	
 	public void setDrums(int drum) throws InterruptedException{
 		
