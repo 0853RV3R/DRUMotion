@@ -42,7 +42,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int currentDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
-	private int timer, song1Timer, song2Timer;
+	private int timer;
 	long timeLeft;
 	private int timerLast = 1500;
 	boolean fade;
@@ -378,20 +378,6 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	}
 	
 	
-	public long getTime() {
-		return System.nanoTime() / 1000000;
-	}
-	
-	public int getDelta() {
-		long time = getTime();
-		int delta = (int) (time - lastFrame);
-		lastFrame = time;
-		
-		return delta;
-	}
-	
-	
-	
 	// update: called every frame update, BEFORE render method
 	// should do all calcs and movements etc.. GAME LOGIC GOES HERE
 	// 't' ensures objects move at same speed, even with different frame rates
@@ -412,8 +398,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			System.out.println("song picked: song "+ getClient().getGameData().getSongName());
 			if (getClient().getGameData().getSongName().equals("1")){
 				song1.play(); // play song 1
-				secLeft = 0;
-				minLeft = 0;
+				
+				// set up the timer for song 1
+				secLeft = 1;
+				minLeft = 1;
 				
 				songmin = 2;
 				songsec = 38;
@@ -424,8 +412,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			if (getClient().getGameData().getSongName().equals("2")){
 				song2.play(); // play song 2
 				
-				secLeft = 0;
-				minLeft = 0;
+				//set up the timer for the song 2
+				secLeft = 1;
+				minLeft = 1;
 				
 				songmin = 2;
 				songsec = 40;
@@ -473,14 +462,12 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		// to get input from game container
 		Input input = gc.getInput();
 		
-		
-		
-		
 		// if back is pressed go to Stats screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
-
+					
 					endGameToUserScreen(sbg);
 				}
+
 		// if game is done (countdown timer is done), go to Stats screen
 				if( isTimeUp ){
 
@@ -500,9 +487,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						
 					drumPads.close();
 					isInitialized = false;
+
+	
+				// if game is done (countdown timer is done), go to Stats screen
+				if( secLeft == 0 && minLeft == 0 && isInitialized){
+
 					
-					// go to stats page
-					sbg.enterState(4);
+					endGameToResults(sbg);
+				}
 				}
 				
 				
@@ -523,11 +515,6 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		circleError.update(t);
 		circleHit.update(t);	
 		
-		
-		
-		
-		
-		
 		try {
 			if(currentDrum != myGameGen.getDrum()){
 				resetDrums();
@@ -536,7 +523,6 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			currentDrum = myGameGen.getDrum();
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -670,12 +656,18 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			}
 
 		}
+	}
+	
+	// end method update()
+	private void endGameToUserScreen(StateBasedGame sbg) {
 		
+<<<<<<< HEAD
 		*/
 		
 		
 		
-	} // end method update()
+				
+	}// end method update()
 	
 	private void endGameToUserScreen(StateBasedGame sbg) {
 		 		// TODO Auto-generated method stub
@@ -699,6 +691,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		//update+store GameData for User
 		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
 		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
+		 		getClient().getGameData().setCurrentScore(getClient().getGameData().getCurrentScore() + score);
 		 		
 		 	// end game generator while loop
 		 		myGameGen.kill(); //indicates target thread should stop running
@@ -711,6 +704,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		// go to stats page
 		 		sbg.enterState(4);
 		 	}
+
+		
+		 
+	
 	
 	public void setDrums(int drum) throws InterruptedException{
 		
