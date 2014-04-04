@@ -45,10 +45,11 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	Color backgroundColor;
 	private boolean alert = false;
 	private int timer;
-	long timeLeft,pauseTime;
+	long timeLeft,pauseTimeMin, pauseTimeSec;
 	private int timerLast = 1500;
-	boolean fade, isPaused;
+	private boolean fade, isPaused;
 	boolean isInitialized = false;
+	private int pauseCount;
 	Date date = new Date();
 	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
 	SerialInput drumPads = null;
@@ -103,8 +104,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				}else
 					g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
 			}
+		}else{
+			secLeft = (160  +(initsec- pauseTimeSec)/1000)%60;
+			minLeft = ((160  +(initmin- pauseTimeMin)/1000)/60)%60;
+			if(secLeft <=9){
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":0" + secLeft, 500, 150);
+			}else
+				g.drawString("Time Remaining:  " +"  "+ minLeft + ":" + secLeft, 500, 150);
 	
-
 		}
 	
 	
@@ -141,14 +148,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					squareSignal.draw(50, 400, 150, 150);
 					
 				}
-				else if (!isSquareSignaled && isSquareError){ // no signal, hit in error
+				else if (!isSquareSignaled && isSquareError && !isPaused){ // no signal, hit in error
 					squareSignal.stopAt(0);
 					squareError.draw(50, 400, 150, 150);
 					squareError.stopAt(1);
 					isSquareError = false;
 					
 				}
-				else if (!isSquareSignaled){  // empty (no signal)
+				else if (!isSquareSignaled && !isPaused){  // empty (no signal)
 					square.draw(50, 400, 150, 150);
 					
 				}
@@ -169,14 +176,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			pentaSignal.draw(200, 200, 150, 150);
 			
 		}
-		else if (!isPentaSignaled && isPentaError){ // no signal, hit in error
+		else if (!isPentaSignaled && isPentaError && !isPaused){ // no signal, hit in error
 			pentaSignal.stopAt(0);
 			pentaError.draw(200, 200, 150, 150);
 			pentaError.stopAt(1);
 			isPentaError = false;
 			
 		}
-		else if (!isPentaSignaled){  // empty (no signal)
+		else if (!isPentaSignaled && !isPaused){  // empty (no signal)
 			penta.draw(200, 200, 150, 150);
 				
 			}
@@ -193,14 +200,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					triSignal.draw(400, 300, 150, 150);
 					
 				}
-				else if (!isTriSignaled && isTriError){ // no signal, hit in error
+				else if (!isTriSignaled && isTriError && !isPaused){ // no signal, hit in error
 					triSignal.stopAt(0);
 					triError.draw(400, 300, 150, 150);
 					triError.stopAt(1);
 					isTriError = false;
 					
 				}
-				else if (!isTriSignaled){  // empty (no signal)
+				else if (!isTriSignaled && !isPaused){  // empty (no signal)
 					tri.draw(400, 300, 150, 150);
 						
 				}		
@@ -224,7 +231,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					isCircleError = false;
 					
 				}
-				else if (!isCircleSignaled){  // empty (no signal)
+				else if (!isCircleSignaled&& !isPaused){  // empty (no signal)
 					circle.draw(600, 400, 150, 150);
 						
 					}	
@@ -494,10 +501,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						isPaused = true;
 						System.out.println("Game Paused");
 						
-						pauseTime = System.currentTimeMillis();
-								
+						pauseTimeMin = System.currentTimeMillis();
+						pauseTimeSec = System.currentTimeMillis();
 				}	
-				if(input.isKeyDown(Input.KEY_ENTER)){
+				if(input.isKeyDown(Input.KEY_ENTER) && isPaused){
 					song2.resume();
 					isPaused = false;
 					System.out.println("Game back On");
