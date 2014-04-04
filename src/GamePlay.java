@@ -635,7 +635,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				
 			}
 			if(!isSquareSignaled){
-				score -= 5;
+				score -= 2;
 				misses++;
 				isSquareError = true;// animation on
 			}
@@ -650,7 +650,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isPentaHit = true;// animation on
 			}
 			if(!isPentaSignaled){
-				score -= 5;
+				score -= 2;
 				misses++;
 				isPentaError = true;// animation on
 			}
@@ -665,7 +665,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isTriHit = true;// animation on
 			}
 			if(!isTriSignaled){
-				score -= 5;
+				score -= 2;
 				misses++;
 				isTriError = true;// animation on
 			}
