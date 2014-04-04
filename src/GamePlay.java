@@ -476,35 +476,16 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					endGameToUserScreen(sbg);
 				}
 
-		// if game is done (countdown timer is done), go to Stats screen
-				if( isTimeUp ){
-
-					song2.pause(); // pause song
-					
-					//update GameData for User
-					getClient().getGameData().setHits(getClient().getGameData().getHits() + hits);
-					getClient().getGameData().setMisses( getClient().getGameData().getMisses() + misses);
-					getClient().getGameData().setCurrentScore( getClient().getGameData().getCurrentScore() + score);
-
-					
-					// end game generator while loop
-					myGameGen.kill(); //indicates target thread should stop running
-					score = 0;
-					hits = 0;
-					misses = 0;
-						
-					drumPads.close();
-					isInitialized = false;
-
+		
 	
 				// if game is done (countdown timer is done), go to Stats screen
-				if( secLeft == 0 && minLeft == 0 && isInitialized){
+				if( secLeft < 0 && isInitialized){
 
 					
 					endGameToResults(sbg);
 				}
 
-				}
+				
 
 				//if p is pressed go pause the game
 				if( input.isKeyDown(Input.KEY_P) ){
@@ -568,7 +549,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						
 					}
 					if(!isSquareSignaled){
-						score -= 5;
+						if (score>= 2){
+						score -= 2;
+						}
 						misses++;
 						isSquareError = true;// animation on
 					}
@@ -583,7 +566,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						isPentaHit = true;// animation on
 					}
 					if(!isPentaSignaled){
-						score -= 5;
+						if (score>= 2){
+							score -= 2;
+							}
 						misses++;
 						isPentaError = true;// animation on
 					}
@@ -598,7 +583,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						isTriHit = true;// animation on
 					}
 					if(!isTriSignaled){
-						score -= 5;
+						if (score>= 2){
+							score -= 2;
+							}
 						misses++;
 						isTriError = true;// animation on
 					}
@@ -613,7 +600,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 						isCircleHit = true;// animation on
 					}
 					if(!isCircleSignaled){
-						score -= 2;
+						if (score>= 2){
+							score -= 2;
+							}
 						misses++;
 						isCircleError = true;// animation on
 					}
@@ -719,9 +708,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		song2.pause(); // pause song
 		 		
 		 		//update+store GameData for User
-		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getHits() + hits);
-		 		getClient().getGameData().setCurrentHits(getClient().getGameData().getMisses() + misses);
-		 		getClient().getGameData().setCurrentScore(getClient().getGameData().getCurrentScore() + score);
+		 		getClient().getGameData().setCurrentHits(hits);
+		 		getClient().getGameData().setCurrentHits(misses);
+		 		getClient().getGameData().setCurrentScore(score);
 		 		
 		 	// end game generator while loop
 		 		myGameGen.kill(); //indicates target thread should stop running

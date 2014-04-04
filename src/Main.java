@@ -34,6 +34,7 @@ public class Main extends ClientBase<GameData> {
 			AppGameContainer app = new AppGameContainer(new Main("DRUMotion"));
 			// set display mode 3 args: (width px, height px, fullscreen?)
 			app.setDisplayMode(800, 600, false);
+			//app.setDisplayMode(1200, 900, false);
 			//Display.setInitialBackground(255, 250, 250);
 			app.setTargetFrameRate(80); // target frame rate: 60fps
 			

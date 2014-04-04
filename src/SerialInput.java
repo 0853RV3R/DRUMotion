@@ -14,6 +14,7 @@ public class SerialInput implements SerialPortEventListener {
         /** The port we're normally going to use. */
 	private static final String PORT_NAMES[] = { 
 			"/dev/tty.usbmodem641", // Mac OS X
+			"/dev/tty.usbmodem411",
 			"/dev/ttyUSB0", // Linux
 			"COM3", // Windows
 	};
