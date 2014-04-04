@@ -546,6 +546,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 * INPUT FROM ACTUAL DRUM HARDWARE
 		 * 
 		 */
+		
+		/*
 		// square
 				if (isDrum1Hit){
 					if(isSquareSignaled){
@@ -615,13 +617,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					}
 					isDrum4Hit = false;
 				}
+		*/
 		
 		/*
 		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
 		 * score is increased by 1 and drum sound is played if correct drum is hit
 		 * score is decreased by 5 if incorrect drum is hit
 		 *
-		
+		*/
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
 			if(isSquareSignaled){
@@ -683,10 +686,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			}
 
 		}
-	}
 	
 	
-		*/
+	
+		
 		
 		
 
