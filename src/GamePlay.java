@@ -442,6 +442,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			
 			Executor executor = Executors.newSingleThreadExecutor();
 			executor.execute(myGameGen);// start gamegen
+			
 			drumPads = new SerialInput();
 			drumPads.initialize();
 			System.out.println("Started DrumPads");
@@ -627,11 +628,11 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					isDrum4Hit = false;
 				}
 		
-		/*
-		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
-		 * score is increased by 1 and drum sound is played if correct drum is hit
-		 * score is decreased by 5 if incorrect drum is hit
-		 *
+		
+//		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
+//		 * score is increased by 1 and drum sound is played if correct drum is hit
+//		 * score is decreased by 5 if incorrect drum is hit
+//		 *
 		
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
@@ -694,10 +695,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			}
 
 		}
-	}
 	
 	
-		*/
+	
+	
 		
 		
 
@@ -713,6 +714,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		score = 0;
 		 		hits = 0;
 		 		misses = 0;
+
 		 		drumPads.close();
 		 		isInitialized = false;
 		 		
@@ -735,7 +737,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		score = 0;
 		 		hits = 0;
 		 		misses = 0;
-		 		drumPads.close();
+//**		 		drumPads.close();
 		 		isInitialized = false;
 		 		
 		 		// go to stats page
