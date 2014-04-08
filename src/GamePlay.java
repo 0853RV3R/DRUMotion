@@ -29,19 +29,20 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	// assign variable to picture
 	private Image logo, pause;
 	private Image square, penta,tri, circle;
-	private Animation squareSignal, squareHit, squareError;
-	private Animation pentaSignal, pentaHit, pentaError;
-	private Animation triSignal, triHit, triError;
-	private Animation circleSignal, circleHit, circleError;
-	private boolean isPentaSignaled,isPentaHit,isPentaError;
-	private boolean isSquareSignaled,isSquareHit,isSquareError;
-	private boolean isTriSignaled,isTriHit,isTriError;
-	private boolean isCircleSignaled,isCircleHit,isCircleError;
+	private Animation squareSignal, squareHit, squareError, squareTrans;
+	private Animation pentaSignal, pentaHit, pentaError, pentaTrans;
+	private Animation triSignal, triHit, triError, triTrans;
+	private Animation circleSignal, circleHit, circleError, circleTrans;
+	private boolean isPentaSignaled,isPentaHit,isPentaError, isPentaTrans;
+	private boolean isSquareSignaled,isSquareHit,isSquareError, isSquareTrans;
+	private boolean isTriSignaled,isTriHit,isTriError, isTriTrans;
+	private boolean isCircleSignaled,isCircleHit,isCircleError, isCircleTrans;
 	private int minDrum, maxDrum, drum;
 	private long minTime, maxTime, durationTime,lastFrame;
 	GameGenerator2 myGameGen = null;
 	Thread myThread =null;
 	private int currentDrum = 0;
+	private int transDrum = 0;
 	Color backgroundColor;
 	private boolean alert = false;
 	private int timer;
@@ -143,6 +144,11 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					
 
 				}
+				else if (isSquareTrans){
+					
+					squareTrans.draw(50, 400, 150, 150);
+					squareTrans.stopAt(1);
+				}
 				else if (isSquareSignaled	&& !isPaused){ // signal on
 					
 					squareSignal.draw(50, 400, 150, 150);
@@ -171,10 +177,14 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			isPentaHit = false;
 			
 		}
+		
+		else if (isPentaTrans){
+			pentaTrans.draw(200, 200, 150, 150);
+		}
 		else if (isPentaSignaled && !isPaused){ // signal on
 			
 			pentaSignal.draw(200, 200, 150, 150);
-			
+			pentaTrans.stopAt(1);
 		}
 		else if (!isPentaSignaled && isPentaError && !isPaused){ // no signal, hit in error
 			pentaSignal.stopAt(0);
@@ -194,6 +204,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					triHit.stopAt(1);
 					isTriHit = false;
 					
+				}
+				else if (isTriTrans){
+					triTrans.draw(400, 300, 150, 150);
+					triTrans.stopAt(1);
 				}
 				else if (isTriSignaled && !isPaused){ // signal on
 					
@@ -218,6 +232,10 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					circleHit.stopAt(1);
 					isCircleHit = false;
 					
+				}
+				else if (isCircleTrans){
+					circleTrans.draw(600, 400, 150, 150);
+					circleTrans.stopAt(1);
 				}
 				else if (isCircleSignaled && !isPaused){ // signal on
 					
@@ -294,7 +312,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			int [] squareSignalDurations = {200, 900000};
 			squareSignal = new Animation(squareSignalImages, squareSignalDurations, false);
 			
-			
+			Image [] squareTransImages = { new Image("res/Drums/white.png"), new Image("res/Drums/square empty.png")};
+			int [] squareTransDurations = {20, 20};
+			squareTrans = new Animation(squareTransImages, squareTransDurations, false);
 			
 			// square Unpressed --> Pressed (hit)
 			Image [] squareHitImages = { new Image("res/Drums/square unpressed.png"), new Image("res/Drums/square pressed.png")};
@@ -314,7 +334,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				int [] pentaSignalDurations = {200, 900000};
 				pentaSignal = new Animation(pentaSignalImages, pentaSignalDurations, false);
 				
-				
+				Image [] pentaTransImages = { new Image("res/Drums/white.png"), new Image("res/Drums/pentagon empty.png")};
+				int [] pentaTransDurations = {200, 200};
+				pentaTrans = new Animation(pentaTransImages, pentaTransDurations, false);
 				
 				// pentagon Unpressed --> Pressed (hit)
 				Image [] pentaHitImages = { new Image("res/Drums/pentagon unpressed.png"), new Image("res/Drums/pentagon pressed.png")};
@@ -334,7 +356,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			int [] triSignalDurations = {200, 900000};
 			triSignal = new Animation(triSignalImages, triSignalDurations, false);
 			
-			
+			Image [] triTransImages = { new Image("res/Drums/white.png"), new Image("res/Drums/triangle empty.png")};
+			int [] triTransDurations = {200, 200};
+			triTrans = new Animation(triTransImages, triTransDurations, false);
 			
 			// triangle Unpressed --> Pressed (hit)
 			Image [] triHitImages = { new Image("res/Drums/triangle unpressed.png"), new Image("res/Drums/triangle pressed.png")};
@@ -354,7 +378,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			int [] circleSignalDurations = {200, 900000};
 			circleSignal = new Animation(circleSignalImages, circleSignalDurations, false);
 			
-			
+			Image [] circleTransImages = { new Image("res/Drums/white.png"), new Image("res/Drums/circle empty.png")};
+			int [] circleTransDurations = {200, 200};
+			circleTrans = new Animation(circleTransImages, circleTransDurations, false);
 			
 			// circle Unpressed --> Pressed (hit)
 			Image [] circleHitImages = { new Image("res/Drums/circle unpressed.png"), new Image("res/Drums/circle pressed.png")};
@@ -477,6 +503,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		// to get input from game container
 		Input input = gc.getInput();
 		
+		
 		// if back is pressed go to Stats screen
 				if( input.isKeyDown(Input.KEY_BACK) ){
 					drumPads.close();
@@ -493,7 +520,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				}
 
 				
-
+				/*
 				//if p is pressed go pause the game
 				if( input.isKeyDown(Input.KEY_P) ){
 					
@@ -509,7 +536,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 					isPaused = false;
 					System.out.println("Game back On");
 				}
-
+	*/
 
 				
 				
@@ -517,26 +544,38 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		// to adjust animations to frame rate
 		squareSignal.update(t);
 		squareError.update(t);
-		squareHit.update(t);	
+		squareHit.update(t);
+		//squareTrans.update(t);
 			
 	    pentaSignal.update(t);
 		pentaError.update(t);
 		pentaHit.update(t);
+		//pentaTrans.update(t);
 		
 		triSignal.update(t);
 		triError.update(t);
 		triHit.update(t);		
+		//triTrans.update(t);
 		
 		circleSignal.update(t);
 		circleError.update(t);
 		circleHit.update(t);	
+		//circleTrans.update(t);
 		
 		try {
-			if(currentDrum != myGameGen.getDrum()){
-				resetDrums();
+			if(transDrum != myGameGen.getNextDrum()){ // if changed then..
+				if(myGameGen.getNextDrum() != myGameGen.getDrum()){
+				setTrans(myGameGen.getNextDrum()); // show next drum transition
+				}
 			}
-			setDrums(myGameGen.getDrum());
+			if(currentDrum != myGameGen.getDrum()){ // if current drum is not the same as generated then reset signal
+				
+				
+				resetDrums();//turn all signals to off
+			}
+			setDrums(myGameGen.getDrum());// show NEW drum signal based on generated signal
 			currentDrum = myGameGen.getDrum();
+			transDrum = myGameGen.getNextDrum();
 			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -735,7 +774,24 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		//sbg.enterState(4, new FadeOutTransition(),new FadeInTransition());
 		 	}
 
-
+		 	public void setTrans(int drum) throws InterruptedException{
+				
+				switch (drum){
+				case 1: isSquareTrans = true;
+					break;
+				case 2: isPentaTrans= true;
+					break;
+				case 3: isTriTrans = true;
+					break;
+				case 4: isCircleTrans = true;
+					break;
+				
+				}// end switch
+				
+				
+				
+				
+			}// end method setDrums()
 		
 		
 
@@ -760,16 +816,18 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 	}// end method setDrums()
 	
+
+	
 	public void resetDrums(){
 		
 		 isSquareSignaled = false;
-			
+		isSquareTrans=false;
 		isPentaSignaled = false;
-			
+			isPentaTrans = false;
 		isTriSignaled = false;
-			
+			isTriTrans = false;
 		 isCircleSignaled = false;
-		
+		isCircleTrans = false;
 		
 		
 	}// end method resetDrums()
