@@ -260,7 +260,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		tri = new Image("res/Drums/triangle empty.png");
 		circle = new Image("res/Drums/circle empty.png");
 		pause = new Image("res/Buttons/pause.png");
-		exitButton = new Image("res/Buttons/Exit button clicked.png");
+		exitButton = new Image("res/Buttons/Quit.png");
 		// set initial score to zero
 		score = 0;
 		hits = 0;

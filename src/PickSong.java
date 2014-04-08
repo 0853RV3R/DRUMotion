@@ -15,7 +15,7 @@ public class PickSong extends GameStateBase<GameData,States>{
 	
 	private Image Background, select;
 	private boolean continueClick = false;
-	private boolean backClick, song1Click, song2Click, song3Click, song4Click, upClick, downClick = false;
+	private boolean backClick, song1Click, song2Click, song3Click, song4Click, upClick, downClick, fast1, fast2, fast3, fast4 = false;
 	private int highlight;
 	
 	public PickSong(ClientBase<GameData> theClient, States theState) {
@@ -29,6 +29,41 @@ public class PickSong extends GameStateBase<GameData,States>{
 		select = new Image("res/Buttons/select.png");
 		highlight = 1;
 		song1Click = true;
+	}
+
+	public void mouseClicked(int button, int x, int y, int count) {
+		if (count ==2){
+		if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
+			songsClickReset();
+			song1Click = true;
+			highlight = 1;
+			fast1 = true;
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 1");
+		}
+		if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
+			songsClickReset();
+			song2Click = true;
+			
+			highlight = 2;
+			fast1 = true;
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 2");
+		}
+		
+		if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
+			songsClickReset();
+			song3Click = true;
+			highlight = 3;
+			fast1 = true;
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 3");
+		}
+		if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
+			songsClickReset();
+			song4Click = true;
+			highlight = 4;
+			fast1 = true;
+			System.out.println( "x = " + x + "  y = " +y+ "/n song 4");
+		}
+		}
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -120,12 +155,16 @@ public class PickSong extends GameStateBase<GameData,States>{
 		
 		Input input = gc.getInput();
 		
-		if(  continueClick && (this.getSong() == 1 || this.getSong() ==2)){
+		if( ( continueClick && (this.getSong() == 1 || this.getSong() ==2))||fast1||fast2||fast3||fast4){
 			// go to pick song
 			continueClick = false;
 			getClient().getGameData().setSongName(getSong().toString());// set song in game data
 			System.out.print("Song Chosen: ");
 			System.out.println(getClient().getGameData().getSongName());
+			fast1 = false;
+			fast2 = false;
+			fast3 = false;
+			fast4 = false;
 			sbg.enterState(9);
 			
 		}
@@ -164,11 +203,6 @@ public class PickSong extends GameStateBase<GameData,States>{
 	}
 
 
-	@Override
-	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
