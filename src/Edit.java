@@ -66,7 +66,7 @@ public class Edit extends GameStateBase<GameData,States> {
 		//Draw Background
 		g.drawImage(Background, 0,0 ,800, 600,0,0,1350,770);
 		g.setColor(Color.blue);
-		g.drawString( userName, 160, 300);
+		g.drawString( userName, 160, 310);
 	}
 
 	

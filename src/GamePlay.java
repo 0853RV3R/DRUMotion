@@ -27,7 +27,7 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 // A basic scene:
 public class GamePlay extends GameStateBase<GameData,States>{
 	// assign variable to picture
-	private Image logo, pause;
+	private Image logo, pause, exitButton;
 	private Image square, penta,tri, circle;
 	private Animation squareSignal, squareHit, squareError, squareTrans;
 	private Animation pentaSignal, pentaHit, pentaError, pentaTrans;
@@ -44,7 +44,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int currentDrum = 0;
 	private int transDrum = 0;
 	Color backgroundColor;
-	private boolean alert = false;
+	private boolean exit = false;
 	private int timer;
 	long timeLeft,pauseTimeMin, pauseTimeSec;
 	private int timerLast = 1500;
@@ -53,7 +53,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	private int pauseCount;
 	Date date = new Date();
 	long  songsec, songmin, sec2, min1, min2, minLeft, secLeft,  initsec, initmin;
-	SerialInput drumPads = null;
+//	SerialInput drumPads = null;
 	boolean isTimeUp;
 	Font font;
 	int score;
@@ -79,6 +79,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	
 		g.setBackground(backgroundColor);
 		logo.draw(280,25,450,130);
+		exitButton.draw(280,500,200,100);
 		
 		// render text for score box
 		//g.setFont(font);
@@ -277,6 +278,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		tri = new Image("res/Drums/triangle empty.png");
 		circle = new Image("res/Drums/circle empty.png");
 		pause = new Image("res/Buttons/pause.png");
+		exitButton = new Image("res/Buttons/Quit.png");
 		// set initial score to zero
 		score = 0;
 		hits = 0;
@@ -468,8 +470,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			
 			Executor executor = Executors.newSingleThreadExecutor();
 			executor.execute(myGameGen);// start gamegen
-			drumPads = new SerialInput();
-			drumPads.initialize();
+			
+//			drumPads = new SerialInput();
+//			drumPads.initialize();
 			System.out.println("Started DrumPads");
 			
 			isInitialized = true;
@@ -505,8 +508,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 		
 		// if back is pressed go to Stats screen
-				if( input.isKeyDown(Input.KEY_BACK) ){
-					drumPads.close();
+				if( input.isKeyDown(Input.KEY_BACK) || exit ){
+//					drumPads.close();
+					exit = false;
 					endGameToUserScreen(sbg);
 				}
 
@@ -658,12 +662,21 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				}
 		*/
 		
+
+		
+//		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
+//		 * score is increased by 1 and drum sound is played if correct drum is hit
+//		 * score is decreased by 5 if incorrect drum is hit
+//		 *
+		
+
 		/*
 		 * THE FOLLOWING SIMULATES INPUT FROM DRUM PADS via keyboard 
 		 * score is increased by 1 and drum sound is played if correct drum is hit
 		 * score is decreased by 5 if incorrect drum is hit
 		 *
 		*/
+
 		// square
 		if (input.isKeyPressed(Input.KEY_7)){
 			if(isSquareSignaled){
@@ -736,9 +749,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 	
 	
 	
-		
-		
-		
+
 
 		
 				
@@ -752,7 +763,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		score = 0;
 		 		hits = 0;
 		 		misses = 0;
-		 		drumPads.close();
+
+//		 		drumPads.close();
 		 		isInitialized = false;
 		 		
 		 		// go to user page
@@ -765,8 +777,8 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		song2.pause(); // pause song
 		 		
 		 		//update+store GameData for User
-		 		getClient().getGameData().setCurrentHits(hits);
-		 		getClient().getGameData().setCurrentHits(misses);
+		 		getClient().getGameData().setHits(hits);
+		 		getClient().getGameData().setMisses(misses);
 		 		getClient().getGameData().setCurrentScore(score);
 		 		
 		 	// end game generator while loop
@@ -774,7 +786,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		 		score = 0;
 		 		hits = 0;
 		 		misses = 0;
-		 		drumPads.close();
+//**		 		drumPads.close();
 		 		isInitialized = false;
 		 		
 		 		// go to stats page
@@ -880,9 +892,17 @@ public class GamePlay extends GameStateBase<GameData,States>{
 		
 	}
 
-	@Override
-	public void mousePressed(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
+
+	public void mousePressed(int arg, int x, int y) {
+
+		System.out.println( "x = " + x + "  y = " +y);
+
+		
+		//Check which user they select
+		if  (280<= x && x <= 480 && 500 <= y && y <= 600){
+			exit = true;
+			System.out.println( "x = " + x + "  y = " +y);
+		}
 		
 	}
 

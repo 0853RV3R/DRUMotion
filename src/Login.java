@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class Login  extends GameStateBase<GameData,States>{
 	
 	private Image Background, select, scrollUp, scrollDown;
-	private boolean continueClick, refresh = false;
+	private boolean continueClick, refresh, fast1, fast2, fast3, fast4 = false;
 	private boolean backClick, user1Click, user2Click, user3Click, user4Click, upClick, downClick = false;
 	String User_1, User_2, User_3, User_4, User_5, User_6, du1, du2, du3, du4;
 	ClientBase<GameData> client;
@@ -44,6 +45,39 @@ public class Login  extends GameStateBase<GameData,States>{
 
 		//Get users from Database
 				
+	}
+	
+	public void mouseClicked(int button, int x, int y, int count) {
+		if (count ==2){
+			if  (175 <= x && x <= 645 && 260 <= y && y <= 315){
+				user1Click = true;
+				highlight = 1;
+				user = 1;
+				fast1 = true;
+				System.out.println( "x = " + x + "  y = " +y);
+			}
+			if  (175 <= x && x <= 645 && 316 <= y && y <= 370){
+				user2Click = true;
+				highlight = 2;
+				user = 2;
+				fast2 = true;
+				System.out.println( "x = " + x + "  y = " +y);
+			}
+			if  (175 <= x && x <= 645 && 371 <= y && y <= 435){
+				user3Click = true;
+				highlight = 3;
+				user = 3;
+				fast3= true;
+				System.out.println( "x = " + x + "  y = " +y);
+			}
+			if  (175 <= x && x <= 645 && 436 <= y && y <= 490){
+				user4Click = true;
+				highlight = 4;
+				user = 4;
+				fast4 = true;
+				System.out.println( "x = " + x + "  y = " +y);
+			}
+		}
 	}
 
 	public void mousePressed(int button  , int x, int y){
@@ -178,13 +212,18 @@ public class Login  extends GameStateBase<GameData,States>{
 		
 		
 		
-		if(  continueClick){
+		if(  continueClick ||fast1||fast2||fast3||fast4){
 			// go to pick song
 			continueClick = false;
+			fast1 = false;
+			fast2 = false;
+			fast3 = false;
+			fast4 = false;
 			
 			if ( highlight ==1  ){
 				getClient().getGameData().setUserName(du1);
 				System.out.println("User: "+getClient().getGameData().getUserName());
+				
 			}
 			if ( highlight ==2 ){
 				getClient().getGameData().setUserName(du2);
@@ -283,12 +322,6 @@ public class Login  extends GameStateBase<GameData,States>{
 		
 	}
 
-
-	@Override
-	public void mouseClicked(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
