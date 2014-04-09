@@ -313,7 +313,7 @@ public class GamePlay extends GameStateBase<GameData,States>{
 			squareSignal = new Animation(squareSignalImages, squareSignalDurations, false);
 			
 			Image [] squareTransImages = { new Image("res/Drums/white.png"), new Image("res/Drums/square empty.png")};
-			int [] squareTransDurations = {20, 20};
+			int [] squareTransDurations = {200, 200};
 			squareTrans = new Animation(squareTransImages, squareTransDurations, false);
 			
 			// square Unpressed --> Pressed (hit)
@@ -674,7 +674,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				
 			}
 			if(!isSquareSignaled){
-				score -= 2;
+				if (score>= 2){
+					score -= 2;
+					}
 				misses++;
 				isSquareError = true;// animation on
 			}
@@ -689,7 +691,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isPentaHit = true;// animation on
 			}
 			if(!isPentaSignaled){
-				score -= 2;
+				if (score>= 2){
+					score -= 2;
+					}
 				misses++;
 				isPentaError = true;// animation on
 			}
@@ -704,7 +708,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isTriHit = true;// animation on
 			}
 			if(!isTriSignaled){
-				score -= 2;
+				if (score>= 2){
+					score -= 2;
+					}
 				misses++;
 				isTriError = true;// animation on
 			}
@@ -719,7 +725,9 @@ public class GamePlay extends GameStateBase<GameData,States>{
 				isCircleHit = true;// animation on
 			}
 			if(!isCircleSignaled){
-				score -= 2;
+				if (score>= 2){
+					score -= 2;
+					}
 				misses++;
 				isCircleError = true;// animation on
 			}
